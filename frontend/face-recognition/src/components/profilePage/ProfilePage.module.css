@@ -1,0 +1,23 @@
+.mainContainer {
+  margin-top: 73px;
+  min-height: calc(100vh - 73px);
+  height: fit-content;
+  background-color: #140536;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+.subContainer {
+  max-width: 1440px;
+  display: flex;
+  width: 100vw;
+  justify-content:space-evenly
+}
+
+@media screen and (max-width: 900px) {
+  .subContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
