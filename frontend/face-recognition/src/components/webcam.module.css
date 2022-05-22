@@ -1,0 +1,102 @@
+.container{
+    margin-top:73px;
+    display: flex;
+    min-height:calc(100vh - 73px);
+    align-items: center;
+    justify-content:center;
+    gap: 40px;
+    background-color: #140536;
+    /* flex-wrap: wrap; */
+    width: 100%;
+}
+.webCamContainer{
+    position: relative;
+    margin: 20px;
+    border-radius:10px ;
+    border:1px solid #fff
+}
+.btnContainer{
+    min-width:400px;
+    height: 300px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px
+}
+
+.btnAttendence{
+    width: 240px;
+    height: 55px;
+    border-radius:30px;
+    outline: none;
+    border: none;
+    font-size: 20px;
+    background: #009cda;
+    color: #fff;
+}
+.btnAttendence:hover{
+    cursor: pointer;
+}
+.btnSeeAttendence{
+    width:240px;
+    height: 55px;
+    border-radius:30px;
+    outline: none;
+    border: none;
+    font-size: 20px;
+    color: #009cda;
+    background: transparent;
+    border: 3px solid #009cda;
+
+}
+.changeWebcanConfig{
+    position: absolute;
+    bottom:16px;
+    left: 45%;
+    width: 56px;
+    height: 56px;
+    border-radius:50%;
+    outline: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:rgba(255,255,255,0.4)
+}
+.disabled{
+    background-color: red;
+}
+@media screen and (max-width:1350px) {
+    .container{
+        gap: 0
+    }
+    
+}
+@media screen and (max-width:1200px) {
+    .btnContainer{
+        flex-direction: column;
+    }
+}
+
+
+@media screen and (max-width:1020px) {
+    .btnContainer{
+        width:300px
+    }
+}
+@media screen and (max-width:925px){
+    .btnContainer{
+        height:100px;
+        flex-direction: row;flex-wrap: wrap;
+        width:100%;
+        min-width: 0px;
+    }   
+    .container{
+        flex-direction: column;
+    } 
+}
+@media screen and (max-width:400px) {
+    .webCamContainer{
+        margin: 20px 10px;
+    }
+}
