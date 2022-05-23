@@ -29,7 +29,7 @@ const Criminals = () => {
       <Navbar pageType="Normal" />
       {devices.map((device, key) => (
           <div>
-            <Webcam audio={false} videoConstraints={{width:300,height:300, deviceId: deviceId }} />
+            <Webcam audio={false} mirrored="true" videoConstraints={{width:300,height:300, deviceId: device.deviceId }} />
             {device.label || `Device ${key + 1}`}
 
             <button onClick={getScreenShot}>Get</button>
