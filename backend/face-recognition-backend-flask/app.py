@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, make_response
-
+import requests
 from flask_cors import CORS
 import json
 import cv2
@@ -18,103 +18,74 @@ app = Flask(__name__)
 # app.debug= True
 CORS(app)
 
-@app.route('/api', methods=['GET','POST'])
-def api():
+
+@app.route('/markAttendence', methods=['GET','POST'])
+def markAttendence():
     data = request.get_json()
-    print(data)
+    # print(data)
     resp ="Nobody"
-    directory = './stranger'
     if data :
-        if(os.path.exists(directory)):
-            shutil.rmtree(directory)
-        
-        if not os.path.exists(directory):
-            try:
-                os.mkdir(directory)
-                time.sleep(1)
-                result = data['data']
-                b = bytes(result,'utf-8')
-                image = b[b.find(b',')+1:]
-                # print (image)
-                im = Image.open(io.BytesIO(base64.b64decode(image)))
-                im.save(directory+"/stranger.jpeg")
+        try:
+            # r = requests.get("https://api.github.com/events")
+            # abc=r.json()
+            # print(r[0])
+            # print(abc[0]['id'],abc[0]['actor'])
+            result = data['data']
+            b = bytes(result,'utf-8')
+            image = b[b.find(b',')+1:]
+            # print (image)
+            im = Image.open(io.BytesIO(base64.b64decode(image)))
+            img = cv2.cvtColor(np.array(im), cv2.COLOR_BGR2RGB)
+            faceRec = FaceRec(img)
 
-                img = face_recognition.load_image_file("./stranger/stranger.jpeg")
-                faceRec = FaceRec(img)
-
-                unknownName = faceRec.check_mark_attendence()
-                if len(unknownName) !=0:
-                    resp = unknownName
-                else:
-                    resp = "All faces attendence marked already "
-
-                # print(resp)
-            except:
-                print("Some error occured")
-                pass
-
+            unknownName = faceRec.check_mark_attendence()
+            if len(unknownName) !=0:
+                resp = unknownName
+            else:
+                resp = "All faces attendence marked already "
+            return jsonify(resp)
+            # print(resp)
+        except:
+            print("Some error occured")
+            # pass
+            return make_response(jsonify({"error":"Some internal error occured"}),500)
+    else:
+        return make_response(jsonify({"error":"Bad response"}),400)    
     # print(resp)
 
-    return jsonify(resp)
 
 @app.route("/getEncodings",methods=["GET","POST"])
 def getEncodings():
     data = request.get_json()
-    directory = './userImages'
+    # print(data)
+    
     if data :
-        if(os.path.exists(directory)):
-            shutil.rmtree(directory)
         
-        if not os.path.exists(directory):
-            try:
-                os.mkdir(directory)
-                time.sleep(1)
-                result = data['data']
-                b = bytes(result,'utf-8')
-                image = b[b.find(b',')+1:]
-                # print (image)
-                im = Image.open(io.BytesIO(base64.b64decode(image)))
-                im.save(directory+"/userImage.jpeg")
+        
+        try:
+            print("created")
+            result = data['data']
+            b = bytes(result,'utf-8')
+            image = b[b.find(b',')+1:]
+            im = Image.open(io.BytesIO(base64.b64decode(image)))
+            img = cv2.cvtColor(np.array(im), cv2.COLOR_BGR2RGB)
+            facesCurrFrame = face_recognition.face_locations(img)
+            encodeCurrFrame = face_recognition.face_encodings(img,facesCurrFrame)
 
-                img = face_recognition.load_image_file(directory+"/userImage.jpeg")
-                facesCurrFrame = face_recognition.face_locations(img)
-                encodeCurrFrame = face_recognition.face_encodings(img,facesCurrFrame)
+            print("Hii")
+            if(len(encodeCurrFrame)==1):
+                return make_response(jsonify({"encodeList":np.array(encodeCurrFrame).tolist()}),200)
+            elif(len(encodeCurrFrame)>1):
+                return make_response(jsonify({"error":"More than one face detected. Try with a new image file"}),406)
+            else:
+                return make_response(jsonify({"error":"No face detected. Try with a new image file"}),406)
+            
+        except:
 
-                print("Hii"+ encodeCurrFrame)
-                if(len(encodeCurrFrame)!=0):
-                    return jsonify({"encodeList":np.array(encodeCurrFrame).tolist()})
-                else:
-                    return make_response(jsonify({"error":"No face detected. Try with a new file"}),406)
-                
-            except:
-                print("Some error occured")
-                pass
-
-
-
-
-@app.route("/getAllEncodings",methods=["GET",'POST'])
-def getAllEncodings():
-    path = './images'
-    images = []
-    className = []
-    myList = os.listdir(path)
-    print(myList)
-
-    for cl in myList:
-        curImg = face_recognition.load_image_file(f'{path}/{cl}')
-        images.append(curImg)
-        className.append(cl.split(".")[0])
-
-    encodeList = []
-    for img in images:
-        # print("Hii")
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        encode = face_recognition.face_encodings(img)[0]
-        encodeList.append(encode)  
-    print(encodeList[0])
-
-    return jsonify({"encodeList":np.array(encodeList[0]).tolist()})
+            print("Some error occured")
+            return make_response(jsonify({"error":"Some internal error occured"}),500)
+    else:
+        return make_response(jsonify({"error":"Bad response"}),400)            
 
 
 if __name__ == '__main__':
