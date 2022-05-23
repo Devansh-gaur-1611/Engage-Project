@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Profile.module.css"
 
 
-const Profile = () => {
+const Profile = ({name, workProfile, teamName, mobileNumber, email, imgURL }) => {
   return (
     <>
       <div className={styles.main}>
@@ -11,25 +11,25 @@ const Profile = () => {
         </div>
         <div className={styles.middleContainer}>
           <div className={styles.image}>
-            {/* <img src="{userImg}" alt="user" /> */}
+            <img src={imgURL} alt="user" />
           </div>
           <div className={styles.userInfo}>
-            <div className={styles.name}>Devansh Gaur</div>
-            <div className={styles.rank}>Sub - Inspector</div>
+            <div className={styles.name}>{name}</div>
+            <div className={styles.rank}>{workProfile}</div>
           </div>
         </div>
         <div className={styles.bottomContainer}>
           <div className={styles.innerBottomContainer}>
             <h1 className={styles.header}>Team</h1>
-            <p className={styles.answer}>Crime Branch</p>
+            <p className={styles.answer}>{teamName}</p>
           </div>
           <div className={styles.innerBottomContainer}>
             <h1 className={styles.header}>Mobile No.</h1>
-            <p className={styles.answer}>9012345671</p>
+            <p className={styles.answer}>{mobileNumber}</p>
           </div>
           <div className={styles.innerBottomContainer}>
             <h1 className={styles.header}>Email</h1>
-            <p className={styles.answer}>abc123@gmail.com</p>
+            <p className={styles.answer}>{email}</p>
           </div>
         </div>
       </div>

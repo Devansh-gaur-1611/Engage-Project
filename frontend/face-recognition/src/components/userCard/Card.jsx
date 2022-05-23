@@ -1,12 +1,16 @@
 import React from "react";
 import styles from "./Card.module.css";
-import {Link} from "react-router-dom"
-const Card = ({ image, name, rank, presentDays, totalDays, userId }) => {
-  const percent = Math.floor(
-    (parseInt(presentDays) / parseInt(totalDays)) * 100
-  );
+import { Link } from "react-router-dom";
+const Card = ({ image, name, rank, presentDays, absentDays, userId }) => {
+  const present = parseInt(presentDays);
+  const absent = parseInt(absentDays);
+  const totalDays = present + absent;
+  const percent =
+    totalDays != 0
+      ? Math.floor((present / totalDays) * 100)
+      : 0;
   return (
-    <Link to={`/userprofile/${userId}`}>
+    <Link to={`/admin/userprofile/${userId}`} className={styles.link}>
       <div className={styles.cardContainer}>
         <div className={styles.topSection}>
           <div className={styles.imageContainer}>
@@ -21,7 +25,7 @@ const Card = ({ image, name, rank, presentDays, totalDays, userId }) => {
           <h1 className={styles.heading}>Attendence</h1>
           <div className={styles.bottomInnerSection}>
             <div className={styles.leftSection}>
-              <span className={styles.presentDays}>{presentDays}</span>
+              <span className={styles.presentDays}>{present}</span>
               <span className={styles.text}>out of</span>
               <span className={styles.totalDays}>{totalDays} days</span>
             </div>

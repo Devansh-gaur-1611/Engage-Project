@@ -3,31 +3,12 @@ import styles from "./Calender.module.css";
 import moment from "moment";
 import greenTick from "../../assets/greenTick.svg";
 
-const Calender = () => {
+const Calender = ({currentMonthAttendence}) => {
   const [calendar, setCalendar] = useState([]);
   const [value, setValue] = useState(moment());
   const weekdays = ["S", "M", "T", "W", "T", "F", "S"];
   const todayDate = new Date().toDateString();
-  const dayAttendence = [
-    "P",
-    "P",
-    "H",
-    "P",
-    "A",
-    "P",
-    "A",
-    "P",
-    "P",
-    "P",
-    "P",
-    "A",
-    "A",
-    "P",
-    "A",
-    "P",
-    "P",
-    "P",
-  ];
+  const dayAttendence = currentMonthAttendence;
   const startDay = value.clone().startOf("month").startOf("week");
   const endDay = value.clone().endOf("month").endOf("week");
 

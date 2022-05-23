@@ -3,11 +3,13 @@ import "./App.css";
 import Home from "./pages/home";
 import AdminPanelLogin from "./pages/adminlogin";
 import UserLogin from "./pages/userlogin";
-import ProfilePage from "./components/profilePage/ProfilePage";
 import Department from "./components/department/Department";
 import EmployeesPage from "./components/employees/Employees"
-
 import AddParticipants from "./components/addParticipants/AddParticipants";
+import UserProfileAdmin from "./pages/userprofileadmin";
+import UserProfileLocal from "./pages/userprofilelocal";
+import ForgotPassword from "./components/forgotPassword/Forgot"
+import Criminals from "./components/criminals/Criminals";
 
 function App() {
   return (
@@ -17,10 +19,14 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/adminlogin" element={<AdminPanelLogin />} />
           <Route exact path="/login" element={<UserLogin />} />
+          <Route exact path="/recoverpassword" element={<ForgotPassword />} />
           <Route exact path="/department" element={<Department />} />
-          <Route exact path={`/department/:classId`} element={<EmployeesPage />} />
-          <Route exact path={`/userprofile/:userId`} element={<ProfilePage />} />
+          <Route exact path={`/department/:className`} element={<EmployeesPage />} />
+          <Route exact path={`/userprofile/:userId`} element={<UserProfileLocal />} />
+          <Route exact path={`/admin/userprofile/:userId`} element={<UserProfileAdmin />} />
           <Route exact path={`/:className/addParticipants`} element={<AddParticipants />} />
+          <Route exact path={`/detectcriminals`} element={<Criminals />} />
+
         </Routes>
       </div>
     </Router>

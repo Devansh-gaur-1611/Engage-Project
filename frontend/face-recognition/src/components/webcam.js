@@ -5,6 +5,7 @@ import styles from "./webcam.module.css";
 import { BsCameraVideo } from "react-icons/bs";
 import { BsCameraVideoOff } from "react-icons/bs";
 import { useSnackbar } from "notistack";
+import {Link} from "react-router-dom"
 
 const WebcamCapture = () => {
   const webcamRef = useRef(null);
@@ -62,7 +63,7 @@ const WebcamCapture = () => {
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
     console.log("imageSrc = " + imageSrc);
-    Promise.resolve(axios.post("http://127.0.0.1:5000/api", { data: imageSrc }))
+    Promise.resolve(axios.post("http://127.0.0.1:5000/markAttendence", { data: imageSrc }))
       .then((res) => {
         console.log("response: " + res);
         setName(res.data);
@@ -98,7 +99,7 @@ const WebcamCapture = () => {
             height={heightWebCam}
             ref={webcamRef}
             mirrored="true"
-            screnshotFormat="images/jpeg"
+            screenshotFormat="images/jpeg"
             width={widthWebcam}
             style={{ borderRadius: "10px", display: "block" }}
             videoConstraints={videoConstraints}
@@ -153,7 +154,9 @@ const WebcamCapture = () => {
           </option>
         </select> */}
         </div>
-        <button className={styles.btnSeeAttendence}>See your Attendence</button>
+        <Link to="/login" className={styles.link}>
+          <button className={styles.btnSeeAttendence}>See your Attendence</button>
+        </Link>
       </div>
       <h2 style={{ color:"white"}}>{name}</h2>
     </div>
