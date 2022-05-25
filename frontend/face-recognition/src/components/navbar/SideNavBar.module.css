@@ -57,6 +57,13 @@
   color: #58c3ed;
 }
 
+.item:hover .text{
+  color: #58c3ed;
+}
+
+.selected .text{
+  color: #58c3ed;
+}
 @media screen and (max-width: 1200.9px) {
   .text {
     display: none;

@@ -4,11 +4,14 @@ import {
   IoChevronBackOutline,
   IoArrowBackCircleOutline,
 } from "react-icons/io5";
+
 import styles from "./SideNavBar.module.css";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const DepartmentSidenavBar = () => {
+  const params = useParams()
+  console.log(params);
   return (
     <SideNavBar>
       <div className={styles.deptTopSection}>
@@ -31,7 +34,7 @@ const DepartmentSidenavBar = () => {
         </div>
         <div className={styles.deptName}>Crime Branch</div>
       </div>
-      <Link to={`/${"crimeBranch"}/addParticipants`}>
+      <Link to={`/${params.className}/addParticipants`}>
         <div className={styles.bottomContainer}>
           <div className={styles.addIcon}>
             <AiOutlinePlusCircle />

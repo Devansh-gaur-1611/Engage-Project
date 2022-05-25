@@ -46,7 +46,7 @@ const Login = ({ pageType }) => {
         enqueueSnackbar(message, {
           variant: "error",
         });
-        navigate(pageType == "Admin" ? "/" :"")
+        navigate(pageType == "Admin" ? "/" : "");
       });
   };
 
@@ -96,6 +96,11 @@ const Login = ({ pageType }) => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
+                {pageType != "Admin" && (
+                  <div className={styles.forgotPassword}>
+                    <p className={styles.forgotText} onClick={() =>navigate("/recoverpassword")}>Forgot Password</p>
+                  </div>
+                )}
                 <div className={styles.submitBtnContainer}>
                   <button className={styles.signInbtn}>Sign In</button>
                 </div>
