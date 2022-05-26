@@ -1,6 +1,6 @@
-@import url("http://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
 
-/*This is for the styling of admin login page*/
+/*This is for the styling of forgot password page*/
 .mainContainer {
   display: flex;
   flex-direction: row;
