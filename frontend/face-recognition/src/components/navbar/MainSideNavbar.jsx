@@ -34,7 +34,7 @@ const MainSideNavbar = ({ currentPage }) => {
     if (rtoken) {
       Promise.resolve(
         axios.post(
-          "https://apis.techdevelopers.live/api/user/logout",
+          process.env.REACT_APP_NODE_API_URL + "api/user/logout",
           {
             refresh_token: rtoken,
           },

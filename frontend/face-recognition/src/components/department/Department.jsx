@@ -33,7 +33,7 @@ const ProfilePage = () => {
             },
           };
 
-          Promise.resolve(axios.get("https://apis.techdevelopers.live/api/getallteams", config))
+          Promise.resolve(axios.get(process.env.REACT_APP_NODE_API_URL + "api/getallteams", config))
             .then((res) => {
               setDept(res.data.teams);
               setNewDeptCreated(false);
@@ -44,7 +44,7 @@ const ProfilePage = () => {
               // In case if access token has expired
               if (error.response && error.response.status === 401) {
                 axios
-                  .post("https://apis.techdevelopers.live/api/user/refresh", {
+                  .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
                   })
                   .then((res) => {

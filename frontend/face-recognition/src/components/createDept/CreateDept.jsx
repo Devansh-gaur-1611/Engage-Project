@@ -44,7 +44,7 @@ const CreateDeptModal = ({ setIsOpen, setNewDeptCreated }) => {
 
           Promise.resolve(
             axios.post(
-              "https://apis.techdevelopers.live/api/create/team",
+              process.env.REACT_APP_NODE_API_URL + "api/create/team",
               {
                 adminId: localStorage.getItem("userId"),
                 teamName: deptName,
@@ -67,7 +67,7 @@ const CreateDeptModal = ({ setIsOpen, setNewDeptCreated }) => {
               // In case if access token has expired
               if (error.response && error.response.status === 401) {
                 axios
-                  .post("https://apis.techdevelopers.live/api/user/refresh", {
+                  .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
                   })
                   .then((res) => {

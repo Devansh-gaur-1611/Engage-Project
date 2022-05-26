@@ -39,7 +39,7 @@ const ProfilePage = ({ pageType }) => {
           };
 
           axios
-            .get("https://apis.techdevelopers.live/api/users/" + params.userId, config)
+            .get(process.env.REACT_APP_NODE_API_URL + "api/users/" + params.userId, config)
             .then((res) => {
               setName(res.data.users.userName);
               setTeamName(res.data.users.teamName);
@@ -56,7 +56,7 @@ const ProfilePage = ({ pageType }) => {
               // In case if access token has expired
               if (error.response && error.response.status === 401) {
                 axios
-                  .post("https://apis.techdevelopers.live/api/user/refresh", {
+                  .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
                   })
                   .then((res) => {
@@ -121,7 +121,7 @@ const ProfilePage = ({ pageType }) => {
     if (rtoken) {
       Promise.resolve(
         axios.post(
-          "https://apis.techdevelopers.live/api/user/logout",
+          process.env.REACT_APP_NODE_API_URL + "api/user/logout",
           {
             refresh_token: rtoken,
           },

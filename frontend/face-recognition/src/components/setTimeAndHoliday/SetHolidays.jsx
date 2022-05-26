@@ -41,7 +41,7 @@ const SetHolidays = () => {
             },
           };
 
-          Promise.resolve(axios.get("https://apis.techdevelopers.live/api/get/holidays", config))
+          Promise.resolve(axios.get(process.env.REACT_APP_NODE_API_URL + "api/get/holidays", config))
             .then((res) => {
               setDay(res.data.holidays.days);
               setDate(res.data.holidays.dates);
@@ -85,7 +85,7 @@ const SetHolidays = () => {
               // In case if access token has expired
               if (error.response && error.response.status === 401) {
                 axios
-                  .post("https://apis.techdevelopers.live/api/user/refresh", {
+                  .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
                   })
                   .then((res) => {

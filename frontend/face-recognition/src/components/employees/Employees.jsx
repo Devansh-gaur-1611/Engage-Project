@@ -32,7 +32,7 @@ const EmployeesPage = () => {
             },
           };
 
-          Promise.resolve(axios.get("https://apis.techdevelopers.live/api/users/team/" + params.className, config))
+          Promise.resolve(axios.get(process.env.REACT_APP_NODE_API_URL + "api/users/team/" + params.className, config))
             .then((res) => {
               setEmployeeList(res.data.users);
               setLoading(false);
@@ -42,7 +42,7 @@ const EmployeesPage = () => {
               if (error.response && error.response.status === 401) {
                 // In case if access token has expired
                 axios
-                  .post("https://apis.techdevelopers.live/api/user/refresh", {
+                  .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
                   })
                   .then((res) => {

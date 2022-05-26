@@ -16,8 +16,30 @@ const SetTime = () => {
 
   // Initializing the time array
   const timeArr = [
-    "00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00",
-    "12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"
+    "00:00",
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
   ];
 
   // Getting the current setted attendence time at time of page load
@@ -36,7 +58,7 @@ const SetTime = () => {
             },
           };
 
-          Promise.resolve(axios.get("https://apis.techdevelopers.live/api/get/attendancetime", config))
+          Promise.resolve(axios.get(process.env.REACT_APP_NODE_API_URL + "api/get/attendancetime", config))
             .then((res) => {
               console.log(res.data);
               if (res.data.attendanceTime.attendanceTime != "") {
@@ -50,7 +72,7 @@ const SetTime = () => {
               // In case if access token has expired
               if (error.response && error.response.status === 401) {
                 axios
-                  .post("https://apis.techdevelopers.live/api/user/refresh", {
+                  .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
                   })
                   .then((res) => {
@@ -121,7 +143,7 @@ const SetTime = () => {
 
           Promise.resolve(
             axios.post(
-              "https://apis.techdevelopers.live/api/" + functionType + "/attendancetime",
+              process.env.REACT_APP_NODE_API_URL + "api/" + functionType + "/attendancetime",
               {
                 attendanceTime: time,
               },
@@ -140,7 +162,7 @@ const SetTime = () => {
               // In case if access token has expired
               if (error.response && error.response.status === 401) {
                 axios
-                  .post("https://apis.techdevelopers.live/api/user/refresh", {
+                  .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
                   })
                   .then((res) => {

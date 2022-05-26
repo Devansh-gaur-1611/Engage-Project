@@ -26,7 +26,7 @@ const AttendanceModal = ({ setTeamModalOpen, imageSrc }) => {
 
     // Call for backend API
     Promise.resolve(
-      axios.post(process.env.REACT_APP_NODE_API_URL+"markAttendence", {
+      axios.post(process.env.REACT_APP_FLASK_API_URL+"markAttendence", {
         imageSrc: imageSrc,
         teamName: teamName,
       })
