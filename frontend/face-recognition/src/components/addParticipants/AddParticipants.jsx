@@ -219,7 +219,14 @@ const AddParticipants = () => {
           <h1 className={styles.title}>Add New Participant</h1>
           <form className={styles.form} onSubmit={(e) => (encoding != null ? submitHandler(e) : notSubmit(e))}>
             <label className={styles.label}>Name</label>
-            <input type="text" className={styles.input} onChange={(e) => setName(e.target.value)} required min />
+            <input
+              type="text"
+              className={styles.input}
+              onChange={(e) => setName(e.target.value)}
+              required
+              minLength="4"
+              maxLength="50"
+            />
             <label className={styles.label}>Rank</label>
             <input type="text" className={styles.input} onChange={(e) => setWorkProfile(e.target.value)} required />
             <label className={styles.label}>Email</label>

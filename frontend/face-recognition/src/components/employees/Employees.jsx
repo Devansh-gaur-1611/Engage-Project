@@ -34,7 +34,6 @@ const EmployeesPage = () => {
 
           Promise.resolve(axios.get("https://apis.techdevelopers.live/api/users/team/" + params.className, config))
             .then((res) => {
-              console.log(res);
               setEmployeeList(res.data.users);
               setLoading(false);
               return;

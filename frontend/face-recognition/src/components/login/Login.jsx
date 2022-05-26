@@ -49,7 +49,6 @@ const Login = ({ pageType }) => {
       })
       .catch((err) => {
         // Handling errors
-        console.log(err);
         let message = err.response.data.message;
         enqueueSnackbar(message, {
           variant: "error",
