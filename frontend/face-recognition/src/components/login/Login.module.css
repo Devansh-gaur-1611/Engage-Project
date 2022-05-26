@@ -1,6 +1,6 @@
-@import url("http://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
 
-/*This is for the styling of admin login page*/
+/*This css file is for the styling of login page*/
 .mainContainer {
   display: flex;
   flex-direction: row;
@@ -131,7 +131,7 @@
   font-weight: 400;
   font-size:16px;
   font-style: normal;
-  color:#140536;
+  color:#ff0000;
   cursor: pointer;
 
 }
