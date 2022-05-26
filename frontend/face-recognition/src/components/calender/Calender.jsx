@@ -16,7 +16,6 @@ const Calender = ({ currentMonthAttendence, joiningDate }) => {
   // Initialising calender array for current month
   useEffect(() => {
     const day = startDay.clone().subtract(1, "day");
-    console.log(day);
     const a = [];
     while (day.isBefore(endDay, "day")) {
       a.push(

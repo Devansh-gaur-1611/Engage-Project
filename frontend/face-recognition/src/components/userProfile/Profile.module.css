@@ -128,7 +128,7 @@
   .middleContainer {
     gap: 5px;
   }
-  .image {
+  .imageContainer {
     margin-left: 22px;
   }
   .name {
@@ -152,7 +152,7 @@
   .middleContainer {
     gap: 40px;
   }
-  .image {
+  .imageContainer {
     margin-left: 32px;
   }
   .name {
@@ -173,7 +173,7 @@
     height: fit-content;
     gap: 0px;
   }
-  .image {
+  .imageContainer {
     margin: 0px;
   }
   .rank {

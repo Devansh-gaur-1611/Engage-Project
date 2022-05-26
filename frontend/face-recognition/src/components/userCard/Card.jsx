@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Card.module.css";
 import { Link } from "react-router-dom";
+import avatar from "../../assets/avatar.svg"
 const Card = ({ image, name, rank, presentDays, absentDays, userId }) => {
   const present = parseInt(presentDays);
   const absent = parseInt(absentDays);
@@ -14,7 +15,7 @@ const Card = ({ image, name, rank, presentDays, absentDays, userId }) => {
       <div className={styles.cardContainer}>
         <div className={styles.topSection}>
           <div className={styles.imageContainer}>
-            <img src={image} alt="userImage" className={styles.image} />
+            <img src={image || avatar} alt="userImage" className={styles.image} />
           </div>
           <div className={styles.textContainer}>
             <h1 className={styles.userName}>{name}</h1>
