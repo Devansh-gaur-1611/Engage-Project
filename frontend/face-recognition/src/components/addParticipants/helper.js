@@ -2,12 +2,12 @@ export const handleFileInputChange = (e, setLoading, setFile, setbase64URL, setE
   if (e.target.files[0] != undefined) {
     setLoading(true);
     setFile(e.target.files[0]);
-    setEncoding(null)
-} else {
+    setEncoding(null);
+  } else {
     setFile(null);
     setbase64URL("");
     setLoading(false);
-    setEncoding(null)
+    setEncoding(null);
   }
 };
 
