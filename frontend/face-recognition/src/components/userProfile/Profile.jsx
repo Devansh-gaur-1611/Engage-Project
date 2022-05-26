@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./Profile.module.css"
+import styles from "./Profile.module.css";
+import avatar from "../../assets/avatar.svg";
 
-
-const Profile = ({name, workProfile, teamName, mobileNumber, email, imgURL }) => {
+const Profile = ({ name, workProfile, teamName, mobileNumber, email, imgURL }) => {
   return (
     <>
       <div className={styles.main}>
@@ -10,8 +10,8 @@ const Profile = ({name, workProfile, teamName, mobileNumber, email, imgURL }) =>
           <h1 className={styles.heading}>User Profile</h1>
         </div>
         <div className={styles.middleContainer}>
-          <div className={styles.image}>
-            <img src={imgURL} alt="user" />
+          <div className={styles.imageContainer}>
+            <img src={imgURL || avatar} alt="user" className={styles.image} />
           </div>
           <div className={styles.userInfo}>
             <div className={styles.name}>{name}</div>

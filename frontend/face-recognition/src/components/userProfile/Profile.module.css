@@ -1,10 +1,11 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=fallback");
+
 .main {
   width: 450px;
   height: 466px;
   background: #30244e;
   border-radius: 16px;
-  margin-top:20px
+  margin-top: 20px;
 }
 .topContainer {
   width: 100%;
@@ -36,13 +37,19 @@
   gap: 20px;
 }
 
-.image {
+.imageContainer {
   width: 102px;
   height: 102px;
   margin-left: 35px;
   margin-right: 12px;
   border-radius: 50%;
   background-color: #ffffff;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
 }
 
 .userInfo {
@@ -60,6 +67,11 @@
   font-size: 24px;
   line-height: 28px;
   color: #e0e0e0;
+  width: 273px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .rank {
@@ -109,73 +121,89 @@
   display: none;
 }
 
-@media screen and (max-width:1200px) {
-  .main{
-    width:400px;
+@media screen and (max-width: 1200px) {
+  .main {
+    width: 400px;
   }
-  .middleContainer{
+  .middleContainer {
     gap: 5px;
   }
-  .image{
-    margin-left:22px
+  .image {
+    margin-left: 22px;
+  }
+  .name {
+    width: 250px;
   }
 }
 
-@media screen and (max-width:950px) {
-  .main{
-    width:350px
+@media screen and (max-width: 950px) {
+  .main {
+    width: 350px;
+  }
+  .name {
+    width: 200px;
   }
 }
-@media screen and (max-width:900px) {
-  .main{
+@media screen and (max-width: 900px) {
+  .main {
     margin: 20px;
     width: 450px;
   }
-  .middleContainer{
+  .middleContainer {
     gap: 40px;
   }
-  .image{
+  .image {
     margin-left: 32px;
   }
+  .name {
+    width: 250px;
+  }
 }
-@media screen and (max-width:480px) {
-  .topContainer{
+@media screen and (max-width: 480px) {
+  .topContainer {
     display: none;
   }
-  .main{
-    background:none;
-    height:fit-content;
-    width:calc(100% - 40px);
+  .main {
+    background: none;
+    height: fit-content;
+    width: calc(100% - 40px);
   }
-  .middleContainer{
+  .middleContainer {
     flex-direction: column;
-    height:fit-content;
+    height: fit-content;
     gap: 0px;
   }
-  .image{
+  .image {
     margin: 0px;
   }
-  .rank{
+  .rank {
     text-align: center;
     width: 100%;
   }
+  .name {
+    width: 80vw;
+    text-align: center;
+  }
 }
-@media screen and (max-width:440px) {
-  .header{
+@media screen and (max-width: 440px) {
+  .header {
     padding-left: 22px;
   }
-  .answer{
-    width:50%
+  .answer {
+    width: 50%;
   }
-  .innerBottomContainer{
-    justify-content: space-between
+  .innerBottomContainer {
+    justify-content: space-between;
   }
 }
-@media screen and (max-width:380px) {
-  .main{
-    width:calc(100% - 20px)
+@media screen and (max-width: 380px) {
+  .main {
+    width: calc(100% - 20px);
   }
-  .header{
-    padding-left:10px
+  .header {
+    padding-left: 10px;
+  }
+  .name {
+    width: 90vw;
   }
 }
