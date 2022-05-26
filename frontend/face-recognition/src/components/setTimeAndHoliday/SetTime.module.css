@@ -158,6 +158,32 @@
   }
 }
 
+@media screen and (max-width: 500px) {
+  .headingTime {
+    text-align: center;
+  }
+  .mainTimeContainer {
+    width: 100%;
+  }
+  .container {
+    background: transparent;
+    border-top: 1px solid #615088;
+    border-bottom: 1px solid #615088;
+    border-radius: 0px;
+    box-shadow: none;
+  }
+  .currentTimeContainer {
+    padding: 0px 10px;
+  }
+  .updateTimeContainer {
+    padding: 0px 10px;
+  }
+  .submitTime {
+    background: #54417d;
+    color: #00b7ff;
+  }
+}
+
 @media screen and (max-width: 370px) {
   .currTimeText {
     font-size: 18px;
@@ -172,7 +198,7 @@
   }
   .submitTime {
     width: 160px;
-    height: 28px;
+    height: 35px;
     font-size: 18px;
   }
 }

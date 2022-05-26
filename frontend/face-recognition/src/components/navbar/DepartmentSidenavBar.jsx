@@ -42,6 +42,7 @@ const DepartmentSidenavBar = () => {
         onClick={() => {
           dispatch(smallSidebarClose());
         }}
+        className={styles.link}
       >
         <div className={styles.bottomContainer}>
           <div className={styles.addIcon}>
