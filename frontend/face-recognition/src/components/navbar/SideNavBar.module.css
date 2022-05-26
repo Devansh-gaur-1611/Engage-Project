@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=fallback");
+
 .sideBar {
   width: 300px;
   background-color: #402063;
@@ -6,6 +8,19 @@
   display: inline;
   margin-top: 73px;
   position: fixed;
+}
+.sideBarSmallScreen {
+  width: 100vw;
+  background-color: #402063;
+  min-height: 100vh;
+  height: fit-content;
+  display: none;
+  /* margin-top: 73px; */
+  position: fixed;
+  z-index: 10;
+}
+.close {
+  display: none;
 }
 @media screen and (min-width: 1800px) {
   .sideBar {
@@ -21,6 +36,18 @@
 @media screen and (max-width: 600px) {
   .sideBar {
     display: none;
+  }
+  .sideBarSmallScreen {
+    display: inline;
+  }
+  .close {
+    display: block;
+    position: absolute;
+    z-index: 10;
+    right: 20px;
+    top: 30px;
+    color: #fff;
+    font-size: 20px;
   }
 }
 
@@ -48,7 +75,15 @@
   display: flex;
   align-items: center;
 }
-
+.optionName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.svg {
+  width: 30px;
+  display: none;
+}
 .selected,
 .item:hover {
   border-radius: 8px;
@@ -57,23 +92,59 @@
   color: #58c3ed;
 }
 
-.item:hover .text{
-  color: #58c3ed;
-}
-
-.selected .text{
-  color: #58c3ed;
-}
-@media screen and (max-width: 1200.9px) {
-  .text {
+@media screen and (max-width: 1200.9px) and (min-width: 600.5px) {
+  .optionName {
     display: none;
+  }
+  .svg{
+    display: flex;
+  }
+  .item {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
   .selected,
   .item:hover {
-    width: 40px;
+    width: 50px;
     border-radius: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    color: #fff;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .optionName {
+    display: block;
+  }
+  .selected,
+  .item:hover {
+    width: 90%;
+    border-radius: 4px;
+  }
+  .mainSideNavbar {
+    width: 100vw;
+    height: calc(100vh - 50px);
+    justify-content: center;
+    gap: 20px;
+    min-height: 470px;
+  }
+  .selected,
+  .item:hover {
+    background: none;
+    border-right: 1px solid #009cda;
+  }
+  .item {
+    justify-content: center;
+  }
+}
+
+
 
 /* Dept. Side Navbar Styles */
 .deptTopSection {
@@ -158,7 +229,7 @@
   color: #ffffff;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1200px) and (min-width:600px) {
   .icon1,
   .back,
   .deptName,
