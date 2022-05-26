@@ -52,34 +52,33 @@
   text-align: left;
 }
 
-.label{
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight:400;
-    font-size:24px;
-    color: rgb(202, 202, 202);
-    text-align: left;
-    display:block;
+.label {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  color: rgb(202, 202, 202);
+  text-align: left;
+  display: block;
 }
 
-.input{
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight:400;
-    font-size:20px;
-    background-color:#393158;
-    color: white;
-    border:1px solid #fff;
-    width: calc(100% - 10px);
-    height: 28px;
-    margin:16px 0px 20px;
-    border-radius: 4px;
+.input {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  background-color: #393158;
+  color: white;
+  border: 1px solid #fff;
+  width: calc(100% - 10px);
+  height: 28px;
+  margin: 16px 0px 20px;
+  border-radius: 4px;
 }
 .modalActions {
-  padding:10px;
+  padding: 10px;
   text-align: left;
 }
-
 
 .closeBtn {
   cursor: pointer;
@@ -106,19 +105,38 @@
 }
 
 .submitBtn {
-    width: calc(100% - 4px);
-    height: 32px;
-    border-radius: 4px;
-    outline: none;
-    border:none;
-    background-color:#009cda;
-    color: #fff;
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size:18px;
+  width: calc(100% - 4px);
+  height: 32px;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  background-color: #009cda;
+  color: #fff;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
 }
 
-.submitBtn:hover{
-    background-color:#008ec6
+.submitBtn:hover {
+  background-color: #008ec6;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 450px) {
+  .modal {
+    width: 95vw;
+  }
+  .heading {
+    font-size: 26px;
+  }
+  .label {
+    font-size: 23px;
+  }
+}
+
+@media screen and (max-width: 330px) {
+  .heading {
+    font-size: 24px;
+  }
 }

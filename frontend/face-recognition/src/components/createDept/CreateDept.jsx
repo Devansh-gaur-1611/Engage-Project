@@ -1,16 +1,21 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./CreateDept.module.css";
 import axios from "axios";
 import RandomColor from "./randomColor";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { RiCloseLine } from "react-icons/ri";
-const CreateDeptModal = ({ setIsOpen,totalClasses,setTotalClasses }) => {
+import Loader from "../Loader/Loader";
+
+const CreateDeptModal = ({ setIsOpen, setNewDeptCreated }) => {
+  // Declaring variables
   const [deptName, setDeptName] = useState("");
   const [abv, setAbv] = useState("");
+  const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
+  // Function to get abreviation of a dept/class name
   const getAbrevation = () => {
     const allWords = deptName.split(" ");
     if (allWords.length < 2) {
@@ -20,9 +25,12 @@ const CreateDeptModal = ({ setIsOpen,totalClasses,setTotalClasses }) => {
     }
   };
 
+  // Function to submit the request to create class
   const submitHandler = (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
+      // Function which handle the request and handle the request in case access token is expired
       const getdata = () => {
         const atoken = window.localStorage.getItem("accessToken");
         const rtoken = window.localStorage.getItem("refreshToken");
@@ -41,10 +49,7 @@ const CreateDeptModal = ({ setIsOpen,totalClasses,setTotalClasses }) => {
                 adminId: localStorage.getItem("userId"),
                 teamName: deptName,
                 teamBg: RandomColor(),
-                abreviation:
-                  abv.trim() != "" && abv.trim().length == 2
-                    ? abv
-                    : getAbrevation(),
+                abreviation: abv.trim() != "" && abv.trim().length == 2 ? abv : getAbrevation(),
               },
               config
             )
@@ -53,11 +58,13 @@ const CreateDeptModal = ({ setIsOpen,totalClasses,setTotalClasses }) => {
               enqueueSnackbar(res.data.msg, {
                 variant: "Success",
               });
-              setTotalClasses(totalClasses+1);
+              setNewDeptCreated(true);
               setIsOpen(false);
+              setLoading(false);
               return;
             })
             .catch((error) => {
+              // In case if access token has expired
               if (error.response && error.response.status === 401) {
                 axios
                   .post("https://apis.techdevelopers.live/api/user/refresh", {
@@ -65,10 +72,7 @@ const CreateDeptModal = ({ setIsOpen,totalClasses,setTotalClasses }) => {
                   })
                   .then((res) => {
                     localStorage.setItem("accessToken", res.data.access_token);
-                    localStorage.setItem(
-                      "refreshToken",
-                      res.data.refresh_token
-                    );
+                    localStorage.setItem("refreshToken", res.data.refresh_token);
                     getdata();
                     setIsOpen(false);
                     return;
@@ -79,38 +83,48 @@ const CreateDeptModal = ({ setIsOpen,totalClasses,setTotalClasses }) => {
                     });
                     window.localStorage.clear();
                     setIsOpen(false);
+                    setLoading(false);
                     navigate("/");
                     return;
                   });
+              } else {
+                // Handling erros except when access token is expired
+                enqueueSnackbar("Some error occurred. Please try again", {
+                  variant: "error",
+                });
+                setLoading(false);
               }
             });
         } else {
+          // No access token available in local storage
           enqueueSnackbar("You need to login first", {
             variant: "error",
           });
           window.localStorage.clear();
           setIsOpen(false);
+          setLoading(false);
           navigate("/");
           return;
         }
       };
 
+      // Calling the above function
       getdata();
+
       setIsOpen(false);
       return;
     } catch (error) {
-      console.log(error);
       enqueueSnackbar("Some error occured", {
         variant: "error",
       });
       setIsOpen(false);
+      setLoading(false);
       return;
     }
   };
-
-  useEffect(() => {},[totalClasses])
   return (
     <>
+      {loading && <Loader />}
       <div className={styles.darkBG} onClick={() => setIsOpen(false)} />
       <div className={styles.centered}>
         <div className={styles.modal}>
@@ -123,28 +137,18 @@ const CreateDeptModal = ({ setIsOpen,totalClasses,setTotalClasses }) => {
           <form className={styles.form} onSubmit={submitHandler}>
             <div className={styles.modalContent}>
               <label className={styles.label}>Department Name</label>
-              <input
-                type="text"
-                className={styles.input}
-                required
-                onChange={(e) => setDeptName(e.target.value)}
-              />
+              <input type="text" className={styles.input} required onChange={(e) => setDeptName(e.target.value)} />
               <label className={styles.label}>Abreviation {`(Optional)`}</label>
               <input
                 className={styles.input}
                 type="text"
                 minLength="2"
                 maxLength="2"
-                onChange={(e) => setDeptName(e.target.value)}
+                onChange={(e) => setAbv(e.target.value)}
               />
             </div>
             <div className={styles.modalActions}>
-              <input
-                className={styles.submitBtn}
-                type="submit"
-                value="Submit"
-                // onClick={() => setIsOpen(false)}
-              />
+              <input className={styles.submitBtn} type="submit" value="Submit" />
             </div>
           </form>
         </div>
