@@ -1,24 +1,28 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 import styles from "./Department.module.css";
-import Dept from "./dept";
 import DeptCard from "./DeptCard";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import CreateDeptModal from "../createDept/CreateDept";
 import MainSideNavbar from "../navbar/MainSideNavbar";
+import Loader from "../Loader/Loader";
 
 const ProfilePage = () => {
-  const [isOpen,setIsOpen] = useState(false)
+  // Declaring variables
+  const [isOpen, setIsOpen] = useState(false);
+  const [dept, setDept] = useState();
+  const [loading, setLoading] = useState(false);
+  const [newDeptCreated, setNewDeptCreated] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const [dept,setDept]=useState()
-  const [totalClasses,setTotalClasses] = useState(0)
 
   useEffect(() => {
+    setLoading(true);
     try {
+      // Function which handle the request and handle the request in case access token is expired
       const getdata = () => {
         const atoken = window.localStorage.getItem("accessToken");
         const rtoken = window.localStorage.getItem("refreshToken");
@@ -28,25 +32,24 @@ const ProfilePage = () => {
               Authorization: `Bearer ${atoken}`,
             },
           };
-  
-          Promise.resolve(
-            axios.get("https://apis.techdevelopers.live/api/getallteams", config)
-          )
+
+          Promise.resolve(axios.get("https://apis.techdevelopers.live/api/getallteams", config))
             .then((res) => {
-              console.log(res.data)
-              setDept(res.data.teams)
-              setTotalClasses(res.data.length);
+              setDept(res.data.teams);
+              setNewDeptCreated(false);
+              setLoading(false);
               return;
             })
             .catch((error) => {
-              console.log(error+"YoYoerror")
+              // In case if access token has expired
               if (error.response && error.response.status === 401) {
-                axios.post("https://apis.techdevelopers.live/api/user/refresh", {
+                axios
+                  .post("https://apis.techdevelopers.live/api/user/refresh", {
                     refresh_token: rtoken,
-                  }
-                ).then((res) => {
-                    localStorage.setItem("accessToken",res.data.access_token);
-                    localStorage.setItem("refreshToken",res.data.refresh_token);
+                  })
+                  .then((res) => {
+                    localStorage.setItem("accessToken", res.data.access_token);
+                    localStorage.setItem("refreshToken", res.data.refresh_token);
                     getdata();
                     return;
                   })
@@ -54,58 +57,63 @@ const ProfilePage = () => {
                     enqueueSnackbar("You are not logged in", {
                       variant: "error",
                     });
+                    setLoading(false);
                     window.localStorage.clear();
-                    navigate("/")
+                    navigate("/");
                     return;
                   });
+              } else {
+                // Handling erros except when access token is expired
+                enqueueSnackbar("Some error occurred. Please try again", {
+                  variant: "error",
+                });
+                setLoading(false);
               }
             });
         } else {
+          // No access token available in local storage
           enqueueSnackbar("You need to login first", {
             variant: "error",
           });
           window.localStorage.clear();
+          setLoading(false);
           navigate("/");
           return;
         }
       };
-  
-  
+
+      // Calling the above function
       getdata();
       return;
     } catch (error) {
-      console.log(error);
-      enqueueSnackbar("Some error occured" , {
+      setLoading(false);
+      enqueueSnackbar("Some error occured", {
         variant: "error",
       });
+      navigate("/");
       return;
     }
-  },[])
+  }, [newDeptCreated]);
 
   return (
     <>
-      <Navbar pageType="Admin"/>
+      {loading && <Loader />}
+      <Navbar pageType="Admin" hasSidebar="true" />
 
       <MainSideNavbar currentPage="Department" />
       <div className={styles.mainContainer}>
         <div className={styles.createDept}>
-          <h1 className={styles.create} onClick={()=>setIsOpen(!isOpen)}>
+          <h1 className={styles.create} onClick={() => setIsOpen(!isOpen)}>
             <AiOutlinePlusCircle /> &nbsp;&nbsp;Create Dept.
           </h1>
         </div>
         <div className={styles.container}>
-          {(dept!==undefined) && dept.map((e, i) => {
-            return (
-              <DeptCard
-                key={e._id}
-                name={e.teamName}
-                abv={e.abreviation}
-                color={e.teamBg}
-              />
-            );
-          })}
+          {dept !== undefined &&
+            dept.map((e, i) => {
+              return <DeptCard key={e._id} name={e.teamName} abv={e.abreviation} color={e.teamBg} />;
+            })}
         </div>
-        {isOpen && <CreateDeptModal setIsOpen={setIsOpen} totalClasses={totalClasses} setTotalClasses={setTotalClasses}/>}
+        {isOpen && <CreateDeptModal setIsOpen={setIsOpen} setNewDeptCreated={setNewDeptCreated} />}
       </div>
     </>
   );
