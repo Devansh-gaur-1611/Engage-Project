@@ -1,26 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Login.module.css";
 import axios from "axios";
 import signinImage from "../../assets/signInImage.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import Loader from "../Loader/Loader";
 
 const Login = ({ pageType }) => {
+  // Declaring variables
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
+  // Function to handle Login(SignIn)
   const loginHandler = (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
+
+    // Call to the backend API
     Promise.resolve(
       axios.post(
-        "https://apis.techdevelopers.live/api/user/login",
+        process.env.REACT_APP_NODE_API_URL + "api/user/login",
         {
           email,
           password,
@@ -29,23 +37,23 @@ const Login = ({ pageType }) => {
       )
     )
       .then((res) => {
-        console.log(res);
+        // Storing values to local storage
         localStorage.setItem("accessToken", res.data.access_token);
         localStorage.setItem("refreshToken", res.data.refresh_token);
         localStorage.setItem("userId", res.data.id);
         enqueueSnackbar("Logged in successfully", {
           variant: "success",
         });
-        navigate(
-          pageType == "Admin" ? "/department" : `/userprofile/${res.data.id}`
-        );
+        setLoading(false);
+        navigate(pageType == "Admin" ? "/department" : `/userprofile/${res.data.id}`);
       })
       .catch((err) => {
-        console.log(err);
+        // Handling errors
         let message = err.response.data.message;
         enqueueSnackbar(message, {
           variant: "error",
         });
+        setLoading(false);
         navigate(pageType == "Admin" ? "/" : "");
       });
   };
@@ -53,11 +61,10 @@ const Login = ({ pageType }) => {
   return (
     <>
       <div className={styles.mainContainer}>
+        {loading && <Loader />}
         <div className={styles.innerContainer}>
           <div className={styles.imageContainerSignIn}>
-            <span className={styles.iconContainer}>
-              {/* <img src="/images/logoNew.svg" className={styles.icon} /> */}
-            </span>
+            <span className={styles.iconContainer}>{/* <img src="/images/logoNew.svg" className={styles.icon} /> */}</span>
             <img src={signinImage} alt="signin" className={styles.image} />
           </div>
           <div className={styles.formContainer}>
@@ -69,11 +76,8 @@ const Login = ({ pageType }) => {
               /> */}
               </div>
               <div className={styles.formTitleContainer}>
-                <h1 className={styles.formTitle}>
-                  Login{pageType == "Admin" ? " as Admin" : ""}{" "}
-                </h1>
+                <h1 className={styles.formTitle}>Login{pageType == "Admin" ? " as Admin" : ""} </h1>
               </div>
-              {/* <div className={styles.form}> */}
               <form onSubmit={loginHandler}>
                 <label className={styles.inputLabel}>Email</label>
                 <div className={styles.inputBox}>
@@ -96,16 +100,15 @@ const Login = ({ pageType }) => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                {pageType != "Admin" && (
-                  <div className={styles.forgotPassword}>
-                    <p className={styles.forgotText} onClick={() =>navigate("/recoverpassword")}>Forgot Password</p>
-                  </div>
-                )}
+                <div className={styles.forgotPassword}>
+                  <p className={styles.forgotText} onClick={() => navigate("/recoverpassword")}>
+                    Forgot Password
+                  </p>
+                </div>
                 <div className={styles.submitBtnContainer}>
                   <button className={styles.signInbtn}>Sign In</button>
                 </div>
               </form>
-              {/* </div> */}
             </div>
           </div>
         </div>

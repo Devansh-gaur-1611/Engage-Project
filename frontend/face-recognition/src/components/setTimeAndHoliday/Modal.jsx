@@ -1,66 +1,76 @@
 import React, { useState } from "react";
-import styles from "./CreateDept.module.css";
-import axios from "axios";
-import RandomColor from "./randomColor";
+import styles from "./Modal.module.css";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import axios from "axios";
 import { RiCloseLine } from "react-icons/ri";
+import { handleChangeDay, handleChangeDate, inputChecker } from "./helper";
 import Loader from "../Loader/Loader";
 
-const CreateDeptModal = ({ setIsOpen, setNewDeptCreated }) => {
-  // Declaring variables
-  const [deptName, setDeptName] = useState("");
-  const [abv, setAbv] = useState("");
+const Modal = ({ type, setIsOpen, currDays, currDates, setHolidaysChanged }) => {
+  const [value, setValue] = useState(moment());
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const [newDays, setNewDays] = useState("");
+  const [newDates, setNewDates] = useState("");
+  const endDayMonth = parseInt(value.clone().endOf("month").format("DD"));
 
-  // Function to get abreviation of a dept/class name
-  const getAbrevation = () => {
-    const allWords = deptName.split(" ");
-    if (allWords.length < 2) {
-      return deptName.slice(0, 2).toUpperCase();
-    } else {
-      return allWords[0][0].toUpperCase() + allWords[1][0].toUpperCase();
-    }
-  };
-
-  // Function to submit the request to create class
-  const submitHandler = (e) => {
+  const submitHandler = (e, type) => {
     e.preventDefault();
     setLoading(true);
+
+    // Checking the input and getting result in array format
+    let daysData = inputChecker(newDays, 6);
+    let datesData = inputChecker(newDates, endDayMonth);
+
+    // Asking user to edit input fields if invalid
+    if (!daysData || !datesData) {
+      enqueueSnackbar("Some error in the input.Please check and try again !!", {
+        variant: "error",
+      });
+      setLoading(false);
+      return;
+    }
+
+    // If type is update and some field is empty, then set that feild value to previous values
+    if (type != "set") {
+      if (daysData.length == 0) {
+        daysData = currDays;
+      }
+      if (datesData.length == 0) {
+        datesData = currDates;
+      }
+    }
+
     try {
       // Function which handle the request and handle the request in case access token is expired
       const getdata = () => {
         const atoken = window.localStorage.getItem("accessToken");
         const rtoken = window.localStorage.getItem("refreshToken");
-        if (atoken) {
+        const id = window.localStorage.getItem("userId");
+        if (atoken && id) {
           const config = {
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${atoken}`,
             },
           };
 
-          Promise.resolve(
-            axios.post(
-              process.env.REACT_APP_NODE_API_URL + "api/create/team",
-              {
-                adminId: localStorage.getItem("userId"),
-                teamName: deptName,
-                teamBg: RandomColor(),
-                abreviation: abv.trim() != "" && abv.trim().length == 2 ? abv : getAbrevation(),
-              },
-              config
-            )
-          )
+          const data = {
+            adminId: id,
+            days: daysData,
+            dates: datesData,
+          };
+
+          Promise.resolve(axios.post(process.env.REACT_APP_NODE_API_URL + "api/" + type + "/holidays", data, config))
             .then((res) => {
-              enqueueSnackbar(res.data.msg, {
-                variant: "Success",
-              });
-              setNewDeptCreated(true);
-              setIsOpen(false);
               setLoading(false);
+              enqueueSnackbar("Holidays updated successfully", {
+                variant: "success",
+              });
+              setHolidaysChanged(true);
+              setIsOpen(false);
               return;
             })
             .catch((error) => {
@@ -74,51 +84,44 @@ const CreateDeptModal = ({ setIsOpen, setNewDeptCreated }) => {
                     localStorage.setItem("accessToken", res.data.access_token);
                     localStorage.setItem("refreshToken", res.data.refresh_token);
                     getdata();
-                    setIsOpen(false);
                     return;
                   })
                   .catch((error) => {
                     enqueueSnackbar("You are not logged in", {
                       variant: "error",
                     });
-                    window.localStorage.clear();
-                    setIsOpen(false);
                     setLoading(false);
+                    window.localStorage.clear();
                     navigate("/");
                     return;
                   });
               } else {
-                // Handling erros except when access token is expired
-                enqueueSnackbar("Some error occurred. Please try again", {
+                // No holiday set yet
+                enqueueSnackbar("Some error occured, please try again later", {
                   variant: "error",
                 });
                 setLoading(false);
               }
             });
         } else {
-          // No access token available in local storage
           enqueueSnackbar("You need to login first", {
             variant: "error",
           });
           window.localStorage.clear();
-          setIsOpen(false);
           setLoading(false);
           navigate("/");
           return;
         }
       };
 
-      // Calling the above function
       getdata();
-
-      setIsOpen(false);
       return;
     } catch (error) {
+      setLoading(false);
       enqueueSnackbar("Some error occured", {
         variant: "error",
       });
-      setIsOpen(false);
-      setLoading(false);
+      navigate("/");
       return;
     }
   };
@@ -129,26 +132,37 @@ const CreateDeptModal = ({ setIsOpen, setNewDeptCreated }) => {
       <div className={styles.centered}>
         <div className={styles.modal}>
           <div className={styles.modalHeader}>
-            <h5 className={styles.heading}>Create New Department</h5>
+            <h5 className={styles.heading}>{`${type} Holidays`}</h5>
           </div>
           <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
             <RiCloseLine style={{ marginBottom: "-3px" }} />
           </button>
-          <form className={styles.form} onSubmit={submitHandler}>
+          <form className={styles.form} onSubmit={(e) => submitHandler(e, type)}>
             <div className={styles.modalContent}>
-              <label className={styles.label}>Department Name</label>
-              <input type="text" className={styles.input} required onChange={(e) => setDeptName(e.target.value)} />
-              <label className={styles.label}>Abreviation {`(Optional)`}</label>
+              <label className={styles.label}>
+                {type} Holidays{`(Day-wise)`}
+              </label>
+              <label className={styles.subLabel}>{`(Starting from Sunday = 0, Monday = 1 .....)`}</label>
+              <input
+                type="text"
+                className={styles.input}
+                placeholder=" eg : 0,3"
+                value={newDays}
+                onChange={(e) => handleChangeDay(e, setNewDays)}
+              />
+              <label className={styles.label}>
+                {type} Holidays{`(Date-wise)`}
+              </label>
               <input
                 className={styles.input}
                 type="text"
-                minLength="2"
-                maxLength="2"
-                onChange={(e) => setAbv(e.target.value)}
+                placeholder=" eg : 22,26"
+                value={newDates}
+                onChange={(e) => handleChangeDate(e, setNewDates)}
               />
             </div>
             <div className={styles.modalActions}>
-              <input className={styles.submitBtn} type="submit" value="Submit" />
+              <input className={styles.submitBtn} type="submit" value={`${type} Holidays`} />
             </div>
           </form>
         </div>
@@ -157,4 +171,4 @@ const CreateDeptModal = ({ setIsOpen, setNewDeptCreated }) => {
   );
 };
 
-export default CreateDeptModal;
+export default Modal;

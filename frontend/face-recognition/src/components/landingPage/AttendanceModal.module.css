@@ -1,11 +1,10 @@
-
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=fallback");
 
 .darkBG {
   background-color: rgba(0, 0, 0, 0.458);
   width: 100vw;
   height: 100vh;
-  z-index: 0;
+  z-index: 1;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -17,11 +16,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 .modal {
   width: 400px;
-  height: 350px;
+  height: 280px;
   background: #140536;
   color: white;
   z-index: 10;
@@ -32,13 +32,12 @@
 
 .modalHeader {
   height: 75px;
-
   overflow: hidden;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #fff;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+  border-bottom: 1px solid #fff;
 }
 
 .heading {
@@ -51,7 +50,7 @@
 }
 
 .modalContent {
-  padding: 10px 10px 0px;
+  padding: 15px 10px 0px;
   text-align: left;
 }
 
@@ -75,7 +74,7 @@
   border: 1px solid #fff;
   width: calc(100% - 10px);
   height: 28px;
-  margin: 16px 0px 20px;
+  margin: 30px 0px 20px;
   border-radius: 4px;
 }
 .modalActions {
@@ -123,12 +122,15 @@
 
 .submitBtn:hover {
   background-color: #008ec6;
-  cursor: pointer;
 }
 
 @media screen and (max-width: 450px) {
   .modal {
     width: 95vw;
+    height: 260px;
+  }
+  .modalContent {
+    padding: 11px 10px 0px;
   }
   .heading {
     font-size: 26px;
@@ -138,8 +140,11 @@
   }
 }
 
-@media screen and (max-width: 330px) {
+@media screen and (max-width: 350px) {
   .heading {
     font-size: 24px;
+  }
+  .label {
+    font-size: 20px;
   }
 }

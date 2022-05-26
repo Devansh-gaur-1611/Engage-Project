@@ -8,14 +8,20 @@ import Navbar from "../navbar/Navbar";
 import styles from "./Employees.module.css";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import DepartmentSidenavBar from "../navbar/DepartmentSidenavBar";
+import Loader from "../Loader/Loader";
+
 const EmployeesPage = () => {
-  const params = useParams();
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
+  // Declaring variables
   const [employeeList, setEmployeeList] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const params = useParams();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
+    setLoading(true);
     try {
+      // Function which handle the request and handle the request in case access token is expired
       const getdata = () => {
         const atoken = window.localStorage.getItem("accessToken");
         const rtoken = window.localStorage.getItem("refreshToken");
@@ -26,31 +32,22 @@ const EmployeesPage = () => {
             },
           };
 
-          Promise.resolve(
-            axios.get(
-              "https://apis.techdevelopers.live/api/users/team/" +
-                params.className,
-              config
-            )
-          )
+          Promise.resolve(axios.get(process.env.REACT_APP_NODE_API_URL + "api/users/team/" + params.className, config))
             .then((res) => {
-              console.log(res);
               setEmployeeList(res.data.users);
+              setLoading(false);
               return;
             })
             .catch((error) => {
-              console.log(error + "YoYoerror");
               if (error.response && error.response.status === 401) {
+                // In case if access token has expired
                 axios
-                  .post("https://apis.techdevelopers.live/api/user/refresh", {
+                  .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
                   })
                   .then((res) => {
                     localStorage.setItem("accessToken", res.data.access_token);
-                    localStorage.setItem(
-                      "refreshToken",
-                      res.data.refresh_token
-                    );
+                    localStorage.setItem("refreshToken", res.data.refresh_token);
                     getdata();
                     return;
                   })
@@ -59,16 +56,25 @@ const EmployeesPage = () => {
                       variant: "error",
                     });
                     window.localStorage.clear();
+                    setLoading(false);
                     navigate("/");
                     return;
                   });
+              } else {
+                // Handling erros except when access token is expired
+                enqueueSnackbar("Some error occurred. Please try again", {
+                  variant: "error",
+                });
+                setLoading(false);
               }
             });
         } else {
+          // No access token available in local storage
           enqueueSnackbar("You need to login first", {
             variant: "error",
           });
           window.localStorage.clear();
+          setLoading(false);
           navigate("/");
           return;
         }
@@ -77,17 +83,17 @@ const EmployeesPage = () => {
       getdata();
       return;
     } catch (error) {
-      console.log(error);
       enqueueSnackbar("Some error occured", {
         variant: "error",
       });
+      setLoading(false);
       return;
     }
   }, []);
   return (
     <>
-      <Navbar pageType="Admin" />
-
+      <Navbar pageType="Admin" hasSidebar="true" />
+      {loading && <Loader />}
       <DepartmentSidenavBar />
 
       {employeeList != null && employeeList.length > 0 ? (
@@ -95,12 +101,13 @@ const EmployeesPage = () => {
           {employeeList.map((e, i) => {
             return (
               <Card
+                key={e._id}
                 name={e.userName}
                 rank={e.teamName}
-                image="https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/319900/319946.png"
+                image={e.profileImgLink}
                 presentDays={e.attendance.previousMonth.P}
                 absentDays={e.attendance.previousMonth.A}
-                userId="6287c0407433a51b80464df4"
+                userId={e._id}
               />
             );
           })}
@@ -108,8 +115,7 @@ const EmployeesPage = () => {
       ) : (
         <div className={styles.noEmployeeDiv}>
           <h1 className={styles.noEmployeeText}>
-            Currently, No Member in this Department. Click on the{" "}
-            <AiOutlinePlusCircle /> icon to add new members
+            Currently, No Member in this Department. Click on the <AiOutlinePlusCircle /> icon to add new members
           </h1>
         </div>
       )}

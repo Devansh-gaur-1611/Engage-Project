@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=fallback");
+
+/* This page is for styling of navbar.js, NormalNavbar.js */
 .navbar {
   display: flex;
   flex-direction: row;
@@ -49,8 +52,8 @@
   font-weight: 500;
   transition: all 0.3s ease-in-out;
 }
-.adminHeading{
-  justify-content:right;
+.adminHeading {
+  justify-content: right;
   flex-grow: 1;
   padding-right: 20px;
 }
@@ -89,8 +92,7 @@
   align-items: flex-start;
   background-color: #4a89d9;
   border-radius: 5px;
-  box-shadow: 0px 4px 4px rgb(0 0 0 / 25%),
-    inset 0px 1px 0px rgb(255 255 255 / 30%);
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 25%), inset 0px 1px 0px rgb(255 255 255 / 30%);
 }
 .selectLink {
   width: 100%;
@@ -108,7 +110,7 @@
 .hide {
   display: none;
 }
-.burger {
+.burger,.burgerAdmin {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -117,9 +119,14 @@
   top: 0px;
   right: 0px;
   margin: 21px 10px;
+  cursor: pointer;
 }
 .burger:hover {
   cursor: pointer;
+}
+
+.burgerAdmin{
+  display:none
 }
 
 Try This Cross In CSS .close {
@@ -191,19 +198,18 @@ Try This Cross In CSS .close {
   font-weight: 300;
   transition: all 0.3s ease-in-out;
 }
-.hand{
-  animation:handMotion 1s linear infinite
+.hand {
+  animation: handMotion 1s linear infinite;
 }
-.adminHeading:hover .hand{
-  animation:handMotion 0.5s linear infinite
+.adminHeading:hover .hand {
+  animation: handMotion 0.5s linear infinite;
 }
-@keyframes handMotion{
+@keyframes handMotion {
   0% {
-    
     transform: rotate(0deg);
   }
-  50%{
-    transform: rotate(20deg)
+  50% {
+    transform: rotate(20deg);
   }
   100% {
     transform: rotate(0deg);
@@ -215,7 +221,7 @@ Try This Cross In CSS .close {
   .line {
     display: block;
   }
-  .adminLogo{
+  .adminLogo {
     width: 100%;
   }
   .smallScreen {
@@ -245,8 +251,8 @@ Try This Cross In CSS .close {
   .linkAdmin {
     display: flex;
   }
-  .adminHeading{
-    display:none;
+  .adminHeading {
+    display: none;
   }
   .navList {
     margin-top: 60px;
@@ -255,7 +261,6 @@ Try This Cross In CSS .close {
     align-items: left;
   }
   .navList li {
-    /* border-top: 1px solid #fff; */
     display: flex;
     align-items: center;
     margin: 5px 0px;
@@ -263,16 +268,9 @@ Try This Cross In CSS .close {
     height: 40px;
   }
   .select {
-    /* position: absolute; */
     right: calc(50%);
     transform: translateX(50%);
     top: 260px;
-    /* padding: 5px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: flex-end;
-          background-color: #3ecf8e; */
   }
   .hideVisibility {
     display: none;
@@ -285,6 +283,16 @@ Try This Cross In CSS .close {
   }
   .expandNav {
     height: fit-content;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .adminLogo {
+    width: fit-content;
+  }
+  .burgerAdmin{
+    display:flex;
+    flex-grow: 1;
   }
 }
 @media only screen and (max-height: 325px) {

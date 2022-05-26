@@ -10,6 +10,7 @@ import UserProfileAdmin from "./pages/userprofileadmin";
 import UserProfileLocal from "./pages/userprofilelocal";
 import ForgotPassword from "./components/forgotPassword/Forgot"
 import Criminals from "./components/criminals/Criminals";
+import SetTimeHolidayPage from "./pages/SetTimeHolidayPage";
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
           <Route exact path={`/admin/userprofile/:userId`} element={<UserProfileAdmin />} />
           <Route exact path={`/:className/addParticipants`} element={<AddParticipants />} />
           <Route exact path={`/detectcriminals`} element={<Criminals />} />
+          <Route exact path={`/settimeholidays`} element={<SetTimeHolidayPage />} />
+          
 
         </Routes>
       </div>

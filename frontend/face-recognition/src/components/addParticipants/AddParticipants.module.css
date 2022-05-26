@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=fallback");
+
+/* This page is for styling of addParticipants.jsx */
 .mainContainer {
   width: 100%;
   margin-top: 73px;
@@ -95,6 +98,7 @@
   border-radius: 6px;
   border: none;
   outline: none;
+  cursor: pointer;
 }
 .btnSubmit {
   height: 35px;
@@ -109,6 +113,7 @@
   border-radius: 6px;
   border: none;
   outline: none;
+  cursor: pointer;
 }
 @media screen and (max-width: 570px) {
   .container {

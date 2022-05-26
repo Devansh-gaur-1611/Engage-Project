@@ -3,7 +3,8 @@ import styles from "./Calender.module.css";
 import moment from "moment";
 import greenTick from "../../assets/greenTick.svg";
 
-const Calender = ({currentMonthAttendence}) => {
+const Calender = ({ currentMonthAttendence, joiningDate }) => {
+  // Declaring variables
   const [calendar, setCalendar] = useState([]);
   const [value, setValue] = useState(moment());
   const weekdays = ["S", "M", "T", "W", "T", "F", "S"];
@@ -12,9 +13,9 @@ const Calender = ({currentMonthAttendence}) => {
   const startDay = value.clone().startOf("month").startOf("week");
   const endDay = value.clone().endOf("month").endOf("week");
 
+  // Initialising calender array for current month
   useEffect(() => {
     const day = startDay.clone().subtract(1, "day");
-    console.log(day);
     const a = [];
     while (day.isBefore(endDay, "day")) {
       a.push(
@@ -26,21 +27,24 @@ const Calender = ({currentMonthAttendence}) => {
     setCalendar(a);
   }, []);
 
+  // Various check functions
   function beforeToday(day) {
     return day.isBefore(new Date(), "day");
   }
-
   function afterToday(day) {
     return day.isAfter(new Date(), "day");
   }
-
   function isToday(day) {
     return day.isSame(new Date(), "day");
   }
   function currentMonth(day) {
     return day.isSame(new Date(), "month");
   }
+  function beforeJoining(day) {
+    return day.isBefore(new Date(joiningDate), "day");
+  }
 
+  // Setting attendence
   function attendence(day) {
     const date = day.format("D");
     if (dayAttendence[date - 1] == "P") {
@@ -74,14 +78,19 @@ const Calender = ({currentMonthAttendence}) => {
           <div className={styles.weekRow}>
             {week.map((day) => (
               <div className={styles.day}>
-                <div
-                  className={`${styles.dayBox} ${
-                    currentMonth(day) ? "" : styles.blurDate
-                  }`}
-                >
+                <div className={`${styles.dayBox} ${currentMonth(day) ? "" : styles.blurDate}`}>
+                  {/* Before joining Date */}
+                  {beforeToday(day) && beforeJoining(day) ? (
+                    <>
+                      <div>{day.format("D").toString()}</div>
+                      <span className={styles.notMarkedMark}></span>
+                    </>
+                  ) : (
+                    ""
+                  )}
+
                   {/* Before Today */}
-                  {beforeToday(day) && attendence(day) == "Present" ? (
-                    // <img src={greenTick} className={styles.greenTick} />
+                  {beforeToday(day) && !beforeJoining(day) && attendence(day) == "Present" ? (
                     <>
                       <div>{day.format("D").toString()}</div>
                       <span className={styles.presentMark}></span>
@@ -89,7 +98,7 @@ const Calender = ({currentMonthAttendence}) => {
                   ) : (
                     ""
                   )}
-                  {beforeToday(day) && attendence(day) == "Absent" ? (
+                  {beforeToday(day) && !beforeJoining(day) && attendence(day) == "Absent" ? (
                     <>
                       <div>{day.format("D").toString()}</div>
                       <span className={styles.absentMark}></span>
@@ -97,21 +106,17 @@ const Calender = ({currentMonthAttendence}) => {
                   ) : (
                     ""
                   )}
-                  {beforeToday(day) && attendence(day) == "Holiday" ? (
+                  {beforeToday(day) && !beforeJoining(day) && attendence(day) == "Holiday" ? (
                     <>
-                      <div className={styles.holiday}>
-                        {day.format("D").toString()}
-                      </div>
+                      <div className={styles.holiday}>{day.format("D").toString()}</div>
                       <span className={styles.holidayMark}></span>
                     </>
                   ) : (
                     ""
                   )}
-                  {beforeToday(day) && attendence(day) == "" ? (
+                  {beforeToday(day) && !beforeJoining(day) && attendence(day) == "" ? (
                     <>
-                      <div className={styles.notMarked}>
-                        {day.format("D").toString()}
-                      </div>
+                      <div className={styles.notMarked}>{day.format("D").toString()}</div>
                       <span className={styles.notMarkedMark}></span>
                     </>
                   ) : (
@@ -120,20 +125,15 @@ const Calender = ({currentMonthAttendence}) => {
 
                   {/* Today */}
                   {isToday(day) && attendence(day) == "Present" ? (
-                    // <img src={greenTick} className={styles.greenTick} />
                     <>
-                      <div className={styles.today}>
-                        {day.format("D").toString()}
-                      </div>
+                      <div className={styles.today}>{day.format("D").toString()}</div>
                       <span className={styles.presentMark}></span>
                     </>
                   ) : (
                     ""
                   )}
                   {isToday(day) && attendence(day) != "Present" ? (
-                    <div className={styles.today}>
-                      {day.format("D").toString()}
-                    </div>
+                    <div className={styles.today}>{day.format("D").toString()}</div>
                   ) : (
                     ""
                   )}

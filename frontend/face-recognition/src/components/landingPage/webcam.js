@@ -1,26 +1,28 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import axios from "axios";
 import Webcam from "react-webcam";
 import styles from "./webcam.module.css";
 import { BsCameraVideo } from "react-icons/bs";
 import { BsCameraVideoOff } from "react-icons/bs";
-import { useSnackbar } from "notistack";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+import AttendanceModal from "./AttendanceModal";
 
 const WebcamCapture = () => {
+  // Declaring variables
   const webcamRef = useRef(null);
-  const [name, setName] = useState("");
   const [webcamEnabled, setWebcamEnabled] = useState(false);
   const [width, setWidth] = useState();
   const [widthWebcam, setWidthWebCam] = useState(740);
   const [heightWebCam, setHeightWebCam] = useState(416);
-  const { enqueueSnackbar } = useSnackbar();
+  const [teamModalOpen, setTeamModalOpen] = useState(false);
+  const [imageSrc, setImageSrc] = useState();
+
   const videoConstraints = {
     width: widthWebcam,
     height: heightWebCam,
     facingMode: "user",
   };
 
+  // Handling the width and height of the webcam component
   useEffect(() => {
     setWidth(window.innerWidth);
   });
@@ -58,30 +60,21 @@ const WebcamCapture = () => {
     }
   }, [width]);
 
-  // console.log(webCamContainer.current.style)
-
+  // Handling the capture of image using webcam object
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
-    console.log("imageSrc = " + imageSrc);
-    Promise.resolve(axios.post("http://127.0.0.1:5000/markAttendence", { data: imageSrc }))
-      .then((res) => {
-        console.log("response: " + res);
-        setName(res.data);
-        enqueueSnackbar("Congratulations!!"+name+", Your attendence is marked", {
-          variant: "success",
-        });
-      })
-      .catch((error) => {
-        console.log("error: " + error);
-      });
+    setImageSrc(imageSrc);
+    setTeamModalOpen(true);
   }, [webcamRef]);
 
+  // Handling opening and closing of camera
   const changeWebcanConfig = () => {
     setWebcamEnabled(!webcamEnabled);
   };
 
   return (
     <div className={styles.container}>
+      {teamModalOpen && <AttendanceModal setTeamModalOpen={setTeamModalOpen} imageSrc={imageSrc} />}
       <div className={styles.webCamContainer}>
         {!webcamEnabled ? (
           <div
@@ -107,19 +100,13 @@ const WebcamCapture = () => {
         )}
 
         <button
-          className={`${styles.changeWebcanConfig} ${
-            webcamEnabled ? "" : styles.disabled
-          }`}
+          className={`${styles.changeWebcanConfig} ${webcamEnabled ? "" : styles.disabled}`}
           onClick={changeWebcanConfig}
         >
           {webcamEnabled ? (
-            <BsCameraVideo
-              style={{ color: "white", height: "24px", width: "24px" }}
-            />
+            <BsCameraVideo style={{ color: "white", height: "24px", width: "24px" }} />
           ) : (
-            <BsCameraVideoOff
-              style={{ color: "white", height: "24px", width: "24px" }}
-            />
+            <BsCameraVideoOff style={{ color: "white", height: "24px", width: "24px" }} />
           )}
         </button>
       </div>
@@ -127,38 +114,16 @@ const WebcamCapture = () => {
       <div className={styles.btnContainer}>
         <div>
           <button
-            onClick={() =>
-              webcamEnabled
-                ? capture()
-                : alert("Please turn on your camera to mark your attendence")
-            }
+            onClick={() => (webcamEnabled ? capture() : alert("Please turn on your camera to mark your attendence"))}
             className={styles.btnAttendence}
           >
             Mark Attendence
           </button>
-          {/* <select className={styles.inputFull} required>
-          <option
-            value=""
-            // selected
-            // disabled
-            hidden
-            className={styles.disabledOption}
-          >
-            Select
-          </option>
-          <option value="2" className={styles.genderOption}>
-            Male
-          </option>
-          <option value="0" className={styles.genderOption}>
-            Female
-          </option>
-        </select> */}
         </div>
         <Link to="/login" className={styles.link}>
           <button className={styles.btnSeeAttendence}>See your Attendence</button>
         </Link>
       </div>
-      <h2 style={{ color:"white"}}>{name}</h2>
     </div>
   );
 };
