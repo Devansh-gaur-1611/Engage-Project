@@ -1,8 +1,9 @@
 import React from "react";
 import SideNavBar from "./SideNavBar";
 import { IoChevronBackOutline, IoArrowBackCircleOutline } from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { smallSidebarClose } from "../../features/Sidebar/SidebarSlice";
+import {getDepartment} from "../../features/Department/DepartmentSlice"
 import styles from "./SideNavBar.module.css";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Link, useParams } from "react-router-dom";
@@ -11,6 +12,7 @@ const DepartmentSidenavBar = () => {
   // Declaring variables
   const params = useParams();
   const dispatch = useDispatch();
+  const department = useSelector(getDepartment)
 
   return (
     <SideNavBar>
@@ -32,10 +34,10 @@ const DepartmentSidenavBar = () => {
         </Link>
       </div>
       <div className={styles.middleContainer}>
-        <div className={styles.iconContainer} style={{ backgroundColor: "#00ff04" }}>
-          <div className={styles.abv}>CB</div>
+        <div className={styles.iconContainer} style={{ backgroundColor: department.color }}>
+          <div className={styles.abv}>{department.abv}</div>
         </div>
-        <div className={styles.deptName}>Crime Branch</div>
+        <div className={styles.deptName}>{department.deptName}</div>
       </div>
       <Link
         to={`/${params.className}/addParticipants`}
