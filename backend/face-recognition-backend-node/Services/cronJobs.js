@@ -1,7 +1,8 @@
 import cron from "node-cron";
 import { User } from "../models";
+import moment from "moment";
 
-const d = new Date();
+const today = moment().utcOffset(330);
 // Asia/Kolkata
 const cronJobs = {
     NewMonthDefaults() {
@@ -16,10 +17,8 @@ const cronJobs = {
                     if (element == 'P') { P++ }
                     if (element == 'A') { A++ }
                 });
-                const month = d.getMonth() + 1;
-                const year = d.getFullYear();
 
-                const days = daysInMonth(month, year)
+                const days = today.daysInMonth();
                 const blank_days_list = Array(days).fill('A')
                 const newAttendance = {
                     previousMonth: { P: P, A: A },

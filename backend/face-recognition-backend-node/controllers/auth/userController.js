@@ -2,12 +2,9 @@ import Joi from 'joi';
 import { AttendanceTime, User } from "../../models";
 import CustomErrorHandler from "../../Services/CustomerrorHandler";
 import discord from '../../Services/discord';
+import moment from "moment";
 
-
-function convertDate(createdAt) {
-    let milliseconds = new Date(createdAt)
-    return milliseconds.getTime()
-}
+const today = moment().utcOffset(330);
 
 const userController = {
     async getUsersOne(req, res, next) {
@@ -18,7 +15,7 @@ const userController = {
         let data;
         try {
             const document = await User.findOne({ _id: req.params.id }).select('-updatedAt -__v -password -role -encodings ');
-            const convertedDate = convertDate(document.createdAt);
+            const convertedDate = today.valueOf();
             data = {
                 id: document._id,
                 userName: document.userName,
@@ -62,13 +59,12 @@ const userController = {
         let data;
         try {
             const { id, status } = req.body;
-            const today = new Date();
-            const date = today.getDate();
+            const date = today.date();
             const oldData = await User.findOne({ _id: id });
             const attendanceTime = await AttendanceTime.findOne({ adminId: oldData.adminId })
 
-            if (attendanceTime.attendanceTime > today.getHours()) {
-                return next(CustomErrorHandler.badRequest())
+            if (attendanceTime.attendanceTime > today.hours()) {
+                return next(CustomErrorHandler.badRequest("You are late !!"))
             }
             if (oldData) {
                 let days_list = oldData.attendance.currentMonth
