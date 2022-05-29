@@ -1,7 +1,49 @@
 # 👥 Attendo
 #### Attendo is an attendance system works on the principle of face - recognition built under Microsoft Engage Mentorship Program 2022.
 
-## Features of "Attendo"
+
+# Approach Towards Building the Project
+### Development Methodology - Scrum Methodology
+**Agile Scrum Methodology** is basically incremental development i.e. we build the product in iterations, step by step. <br><br>
+We work in “Sprints” where each sprint lasts for a week or two, and focus on building the important features first and then improve the product to make it more potential.
+
+### Here are the sprints I had set for myself for the 4 week journey 😄
+
+#### WEEK 0 ( INITIAL DAYS )
+1. **Learning** more about Backend Development
+2. **Researching** about different api for detecting faces
+3. **Deciding the Tech Stack** and finding suitable resources
+4. **Designing** my product (using [Canva](https://www.canva.com/) and [Figma](https://www.figma.com/) )
+
+#### WEEK 1 ( BUILD PHASE )
+1. Started with developing the **HomePage** and adjusting the camera position.
+2. Developed the **Login** interface for both admins and normal user.
+3. Developed the **Flask** backend part for recognizing the **face** and give back its **details(Encodings)**
+4. Started working on the **Node** for developing auth.
+<br>
+
+**ISSUES :**
+Recognizing Faces in real time **( not implemented as of now, But sure of doing it in near future )**
+
+
+#### WEEK 2 ( BUILD PHASE )
+1. Working on the **Authentication** 
+2. Working on making the site **responsive**
+3. Working on UI/UX and improving its functionality
+<br>
+
+
+#### WEEK 3 ( Winding Up)
+1. Deploying
+2. Completing integration of backend and frontend services
+3. Taking feedback from mentors and other users
+<br>
+
+
+## Video Demonstration 
+🚀 Here's the link to the video demonstration of Meet-Up 🚀
+- https://drive.google.com/drive/folders/1PD40aYAp-6myfnFkAWcEOnfpn-ZPPfs6?usp=sharing
+
 
 ## Before You Begin
 Before you begin we recommend you read about the basic building blocks that assemble my engage project:
@@ -80,8 +122,21 @@ Once you've downloaded the boilerplate and installed all the prerequisites, you'
 - The server will listen on PORT 3000 ( localhost:3000 )
 
 
-## Get started with Backend(Flask)
+## Get all Backend Api's
+- For our Flask Backend Api's go to postman and import via Link
+     ```bash
+     https://www.getpostman.com/collections/0132b47ac294f4383346
+    ```
+- For our Node Backend Api's go to postman and import via Link
+     ```bash
+     https://www.getpostman.com/collections/05ac03a1c3957e6730e8
+    ```
 
+## Get started with Backend(Flask)
+- Our Flask Backend Url 
+     ```bash
+     https://face-recognition-flask-backend.herokuapp.com
+    ```
 - Open the Flask backend folder (Engage Project/backend/face-recognition-backend-flask) and open the folder in VS Code.
 
 - Open the terminal and run the following command to create a virtual environment with namely ".venv"(in windows)
@@ -102,8 +157,11 @@ Once you've downloaded the boilerplate and installed all the prerequisites, you'
     ```
 
 ## Get started with Backend(Node)
-
-- Open the Flask backend folder (Engage Project/backend/face-recognition-backend-node) and open the folder in VS Code.
+- Our Node Backend Url 
+     ```bash
+     https://apis.techdevelopers.live
+    ```
+- Open the Node backend folder (Engage Project/backend/face-recognition-backend-node) and open the folder in VS Code.
 
 - Open the terminal and run the following command to install  dependencies
     ```bash
@@ -127,15 +185,34 @@ Once you've downloaded the boilerplate and installed all the prerequisites, you'
 
 - For redis-url, go to [Upstash](https://upstash.com/). Create an account and then create a database.Then you will get your redis url. You can also refer [Upstash Documentation](https://docs.upstash.com/redis) for help.
 
-- For Mail Server Keys,
+- For Mail Server Keys run the Golang backend Mail-server and use the server url , id , password according to you.
 
-- For Discord Keys,
+- For Discord Keys the open Desktop Discord and open channel edit settings, go to integrations create a Webhook , Copy webhook url and then copy hook id and hook token .
+ <img width = "900" height = "400" src = "./readmeImages/webhook1.png">
+ From webhook Url copy id and token as shown below
+ <img width = "900" height = "150" src = "./readmeImages/webhook2.png">
 
 - After getting all the environment variables, just run the following command to run: 
     ```bash
     $ npm start
     ```
 
+## Get started with Backend(Golang)
+
+- Open the Golang backend folder (Engage Project/backend/face-recognition-backend-MailServer) and open the folder in VS Code.
+
+- Open the terminal and run the following command to install dependencies
+    ```bash
+    $ go mod tidy
+    ```
+- For Discord use the method Node backend Discord setup.
+- For Sendgrid create a [Sendgrid](https://sendgrid.com/) account and create template with the help our template html files (Engage Project/backend/face-recognition-backend-MailServer/services/sendgrid/template) ,After this copy sendgrid apiurl and template id .
+- For Security pupose we hardcoded adminId/password so create adminId password according to you.
+
+- After getting all the environment variables, just run the following command to run: 
+    ```bash
+    $ go run .
+    ```
 
 ## Future Enhancements planned for my Engage Project
 
