@@ -14,6 +14,28 @@
   transition-property: all;
   transition-duration: 150ms;
 }
+
+.iconContainer {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.icon{
+    width: 40px;
+    height: 40px;
+    color: #009cda;
+}
+
+.iconName {
+  font-size: 32px;
+  background: -webkit-linear-gradient(#eee, #009cda);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0px;
+  margin-left: 15px;
+  font-weight: 600;
+}
 .navList {
   display: flex;
   align-items: center;
@@ -289,10 +311,15 @@ Try This Cross In CSS .close {
 @media screen and (max-width: 600px) {
   .adminLogo {
     width: fit-content;
+
   }
   .burgerAdmin{
     display:flex;
     flex-grow: 1;
+  }
+  .iconContainer{
+    position: absolute;
+    left: 0
   }
 }
 @media only screen and (max-height: 325px) {

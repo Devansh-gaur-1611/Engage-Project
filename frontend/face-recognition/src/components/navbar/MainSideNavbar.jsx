@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Loader from "../Loader/Loader";
 import { AiOutlineFieldTime } from "react-icons/ai";
+import { RiAdminFill } from "react-icons/ri";
 import department from "../../assets/department.svg";
 import criminal from "../../assets/criminal.svg";
 import missing from "../../assets/missing.svg";
@@ -96,26 +97,18 @@ const MainSideNavbar = ({ currentPage }) => {
           </div>
         </Link>
         <Link
-          to="/criminaldb"
-          className={`${styles.item} ${currentPage == "Criminals" && styles.selected}`}
+          to="/createAdmin"
+          className={`${styles.item} ${currentPage == "Create Admin" && styles.selected}`}
           onClick={() => {
             dispatch(smallSidebarClose());
           }}
         >
-          <p className={styles.optionName}>Criminal Db</p>
-          <img className={styles.svg} src={criminal} />
+          <p className={styles.optionName}>Create Admin</p>
+          <div className={styles.svg}>
+            <RiAdminFill fontSize="35px" color="white"/>
+          </div>
         </Link>
-        <Link
-          to="/missingdb"
-          className={`${styles.item} ${currentPage == "Missing" && styles.selected}`}
-          onClick={() => {
-            dispatch(smallSidebarClose());
-          }}
-        >
-          <p className={styles.optionName}>Missing Persons Db</p>
-          <img className={styles.svg} src={missing} />
-        </Link>
-        <div className={`${styles.item} ${currentPage == "Missing" && styles.selected}`} onClick={logoutHandler}>
+        <div className={`${styles.item} ${currentPage == "Logout" && styles.selected}`} onClick={logoutHandler}>
           <p className={styles.optionName}>Logout</p>
           <img className={styles.svg} src={logout} />
         </div>
