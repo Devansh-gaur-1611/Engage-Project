@@ -17,6 +17,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 3;
 }
 
 .modal {
@@ -77,6 +78,7 @@
   height: 28px;
   margin: 16px 0px 20px;
   border-radius: 4px;
+  outline: none;
 }
 .modalActions {
   padding: 10px;

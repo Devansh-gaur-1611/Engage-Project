@@ -116,6 +116,7 @@
   color: #ffffff;
   white-space: nowrap;
   margin: 0px;
+  text-align: center;
 }
 @media screen and (min-width: 2124px)  and (max-width:2407.9px) {
     .cardContainer{
