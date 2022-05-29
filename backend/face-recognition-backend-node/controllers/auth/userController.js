@@ -4,10 +4,52 @@ import CustomErrorHandler from "../../Services/CustomerrorHandler";
 import discord from '../../Services/discord';
 import moment from "moment";
 
-const today = moment().utcOffset(330);
 
 const userController = {
+    async updateUser(req, res, next) {
+
+        // validation
+        const updateSchema = Joi.object({
+            userName: Joi.string().min(4).max(50).required(),
+            email: Joi.string().email().required(),
+            contactNumber: Joi.string().required(),
+        });
+
+        const { error } = updateSchema.validate(req.body);
+        if (error) {
+            return next(error);
+        }
+
+        const { userName, email, contactNumber } = req.body;
+
+        let document;
+
+        try {
+            const exist = await User.exists({ email: req.body.email });
+            if (!exist) {
+                // implimetation for discord error logs
+                discord.SendErrorMessageToDiscord(req.body.email, "Update User", "error user not exist in our database !!");
+                return next(CustomErrorHandler.badRequest());
+            }
+            document = await User.findOneAndUpdate({ email }, {
+                userName,
+                email,
+                contactNumber
+            });
+
+            if (!document) {
+                discord.SendErrorMessageToDiscord(email, "Update User", "error in updating the user in database !!");
+                return next(CustomErrorHandler.serverError());
+            }
+        } catch (err) {
+            discord.SendErrorMessageToDiscord(req.body.email, "Update User", err);
+            return next(CustomErrorHandler.badRequest());
+        }
+        res.status(200).json({ status: "Success", msg: "User Updated Successfully !!!  " });
+    },
+
     async getUsersOne(req, res, next) {
+        const today = moment().utcOffset(330);
         const id = req.params.id;
         if (!id) {
             return next(CustomErrorHandler.badRequest())
@@ -46,6 +88,7 @@ const userController = {
         res.status(200).json({ status: "success", users: document });
     },
     async updateAttendance(req, res, next) {
+        const today = moment().utcOffset(330);
         //  use pagination here for big data library is mongoose pagination
         const attendanceSchema = Joi.object({
             id: Joi.string().required(),
@@ -63,11 +106,14 @@ const userController = {
             const oldData = await User.findOne({ _id: id });
             const attendanceTime = await AttendanceTime.findOne({ adminId: oldData.adminId })
 
-            if (attendanceTime.attendanceTime > today.hours()) {
+            console.log(today.hours() + ":" + today.minutes())
+
+            if (attendanceTime.attendanceTime < today.hours()) {
                 return next(CustomErrorHandler.badRequest("You are late !!"))
             }
             if (oldData) {
                 let days_list = oldData.attendance.currentMonth
+                console.log(date)
                 days_list[date - 1] = status;
                 const attendance = {
                     previousMonth: oldData.attendance.previousMonth,

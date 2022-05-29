@@ -42,7 +42,7 @@ const loginController = {
             const refresh_token = JwtService.sign({ _id: user._id }, '7d', REFRESH_SECRET);
             //       redis caching
             const ttl = 60 * 60 * 24 * 7;
-            const ok = RedisService.createRedisClient().set(user._id, refresh_token, "EX", ttl);
+            const ok = await RedisService.createRedisClient().set(user._id, refresh_token, "EX", ttl);
             // const ok = RedisService.set(redis, email, refresh_token, ttl);
 
             if (!ok) {
