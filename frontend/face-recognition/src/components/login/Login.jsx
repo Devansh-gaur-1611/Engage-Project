@@ -5,6 +5,7 @@ import signinImage from "../../assets/signInImage.svg";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Loader from "../Loader/Loader";
+import { FaUsers } from "react-icons/fa";
 
 const Login = ({ pageType }) => {
   // Declaring variables
@@ -64,16 +65,17 @@ const Login = ({ pageType }) => {
         {loading && <Loader />}
         <div className={styles.innerContainer}>
           <div className={styles.imageContainerSignIn}>
-            <span className={styles.iconContainer}>{/* <img src="/images/logoNew.svg" className={styles.icon} /> */}</span>
+            <div className={styles.iconContainer} onClick={() => navigate("/")}>
+              <FaUsers className={styles.icon} />
+              <p className={styles.iconName}>Attendo</p>
+            </div>
             <img src={signinImage} alt="signin" className={styles.image} />
           </div>
           <div className={styles.formContainer}>
             <div className={styles.container}>
-              <div className={styles.logoSmallScreenContainer}>
-                {/* <img
-                src="/images/logoNew.svg"
-                className={styles.iconSmallScreen}
-              /> */}
+              <div className={styles.iconContainerSmallScreen} onClick={() => navigate("/")}>
+                <FaUsers className={styles.icon} />
+                <p className={styles.iconName}>Attendo</p>
               </div>
               <div className={styles.formTitleContainer}>
                 <h1 className={styles.formTitle}>Login{pageType == "Admin" ? " as Admin" : ""} </h1>

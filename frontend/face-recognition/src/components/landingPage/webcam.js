@@ -5,6 +5,8 @@ import { BsCameraVideo } from "react-icons/bs";
 import { BsCameraVideoOff } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import AttendanceModal from "./AttendanceModal";
+import { FaUsers } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const WebcamCapture = () => {
   // Declaring variables
@@ -15,6 +17,7 @@ const WebcamCapture = () => {
   const [heightWebCam, setHeightWebCam] = useState(416);
   const [teamModalOpen, setTeamModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState();
+  const navigate = useNavigate();
 
   const videoConstraints = {
     width: widthWebcam,
@@ -42,21 +45,21 @@ const WebcamCapture = () => {
   }, [width]);
 
   useEffect(() => {
-    if (width >= 1350) {
+    if (width >= 1260) {
       setWidthWebCam(740);
       setHeightWebCam(416);
     } else if (width < 1350 && width > 925) {
       setWidthWebCam(width / 2);
       setHeightWebCam(width / (2 * 1.7794));
-    } else if (width <= 925 && width >= 500) {
-      setWidthWebCam(450);
-      setHeightWebCam(240);
-    } else if (width < 500) {
+    } else if (width <= 925 && width >= 540) {
+      setWidthWebCam(500);
+      setHeightWebCam(400);
+    } else if (width < 540) {
       setWidthWebCam(width - 40);
-      setHeightWebCam((width - 40) / 1.7794);
+      setHeightWebCam(400);
     } else if (width < 400) {
       setWidthWebCam(width - 20);
-      setHeightWebCam((width - 20) / 1.7794);
+      setHeightWebCam(400);
     }
   }, [width]);
 
@@ -75,6 +78,23 @@ const WebcamCapture = () => {
   return (
     <div className={styles.container}>
       {teamModalOpen && <AttendanceModal setTeamModalOpen={setTeamModalOpen} imageSrc={imageSrc} />}
+      <div className={styles.topContainer}>
+        <div className={styles.iconContainer}>
+          <FaUsers className={styles.icon} />
+          <p className={styles.iconName}>Attendo</p>
+        </div>
+        <div className={styles.btnAdminContainer}>
+          <button
+            className={styles.btnAdmin}
+            onClick={() => {
+              navigate("/adminlogin");
+            }}
+          >
+            Admin Pannel
+          </button>
+        </div>
+      </div>
+      <h1 className={styles.welcomeSmallScreen}>Welcome to Attendo</h1>
       <div className={styles.webCamContainer}>
         {!webcamEnabled ? (
           <div
@@ -111,18 +131,20 @@ const WebcamCapture = () => {
         </button>
       </div>
 
-      <div className={styles.btnContainer}>
-        <div>
+      <div className={styles.rightContainer}>
+        <h1 className={styles.welcome}>Welcome to Attendo</h1>
+        <div className={styles.btnContainer}>
           <button
             onClick={() => (webcamEnabled ? capture() : alert("Please turn on your camera to mark your attendence"))}
             className={styles.btnAttendence}
           >
             Mark Attendence
           </button>
+
+          <Link to="/login" className={styles.link}>
+            <button className={styles.btnSeeAttendence}>See your Attendence</button>
+          </Link>
         </div>
-        <Link to="/login" className={styles.link}>
-          <button className={styles.btnSeeAttendence}>See your Attendence</button>
-        </Link>
       </div>
     </div>
   );

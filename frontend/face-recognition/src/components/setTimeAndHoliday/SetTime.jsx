@@ -26,7 +26,7 @@ const SetTime = () => {
 
     try {
       // Function which handle the request and handle the request in case access token is expired
-      const getdata = () => {
+      const getdata = (requestCount) => {
         const atoken = window.localStorage.getItem("accessToken");
         const rtoken = window.localStorage.getItem("refreshToken");
         if (atoken) {
@@ -38,7 +38,6 @@ const SetTime = () => {
 
           Promise.resolve(axios.get(process.env.REACT_APP_NODE_API_URL + "api/get/attendancetime", config))
             .then((res) => {
-              console.log(res.data);
               if (res.data.attendanceTime.attendanceTime != "") {
                 setIsCurrExist(true);
                 setCurrTime(res.data.attendanceTime.attendanceTime);
@@ -48,7 +47,7 @@ const SetTime = () => {
             })
             .catch((error) => {
               // In case if access token has expired
-              if (error.response && error.response.status === 401) {
+              if (error.response && error.response.status === 401 && requestCount == 0) {
                 axios
                   .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
@@ -56,7 +55,7 @@ const SetTime = () => {
                   .then((res) => {
                     localStorage.setItem("accessToken", res.data.access_token);
                     localStorage.setItem("refreshToken", res.data.refresh_token);
-                    getdata();
+                    getdata(1);
                     return;
                   })
                   .catch((error) => {
@@ -68,11 +67,19 @@ const SetTime = () => {
                     navigate("/");
                     return;
                   });
-              } else {
-                // Handling erros except when access token is expired
-                enqueueSnackbar("Some error occurred. Please try again", {
+              } else if (error.response && error.response.status === 401 && requestCount > 0) {
+                // Handling erros when user is not admin
+                enqueueSnackbar("You are not an admin", {
                   variant: "error",
                 });
+                window.localStorage.clear();
+                navigate("/");
+                setLoading(false);
+              }else if (error.response && error.response.status === 400) {
+                // No current holiday set
+                setLoading(false);
+              }else {
+                // Handling erros except when access token is expired
                 setLoading(false);
               }
             });
@@ -89,10 +96,9 @@ const SetTime = () => {
       };
 
       // Calling the above function
-      getdata();
+      getdata(0);
       return;
     } catch (error) {
-      console.log(error);
       setLoading(false);
       enqueueSnackbar("Some error occured", {
         variant: "error",
@@ -108,7 +114,7 @@ const SetTime = () => {
     setLoading(true);
     try {
       // Function which handle the request and handle the request in case access token is expired
-      const getdata = () => {
+      const getdata = (requestCount) => {
         const atoken = window.localStorage.getItem("accessToken");
         const rtoken = window.localStorage.getItem("refreshToken");
         if (atoken) {
@@ -129,7 +135,6 @@ const SetTime = () => {
             )
           )
             .then((res) => {
-              console.log(res.data);
               enqueueSnackbar("Attendance Time " + functionType + "ed successfully", {
                 variant: "success",
               });
@@ -138,7 +143,7 @@ const SetTime = () => {
             })
             .catch((error) => {
               // In case if access token has expired
-              if (error.response && error.response.status === 401) {
+              if (error.response && error.response.status === 401 && requestCount == 0) {
                 axios
                   .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
@@ -146,7 +151,7 @@ const SetTime = () => {
                   .then((res) => {
                     localStorage.setItem("accessToken", res.data.access_token);
                     localStorage.setItem("refreshToken", res.data.refresh_token);
-                    getdata();
+                    getdata(1);
                     return;
                   })
                   .catch((error) => {
@@ -158,7 +163,15 @@ const SetTime = () => {
                     navigate("/");
                     return;
                   });
-              } else {
+              } else if (error.response && error.response.status === 401 && requestCount > 0) {
+                // Handling erros when user is not admin
+                enqueueSnackbar("You are not an admin", {
+                  variant: "error",
+                });
+                window.localStorage.clear();
+                navigate("/");
+                setLoading(false);
+              }else {
                 // Handling erros except when access token is expired
                 enqueueSnackbar("Some error occurred. Please try again", {
                   variant: "error",
@@ -179,10 +192,9 @@ const SetTime = () => {
       };
 
       // Calling the above function
-      getdata();
+      getdata(0);
       return;
     } catch (error) {
-      console.log(error);
       setLoading(false);
       enqueueSnackbar("Some error occured", {
         variant: "error",

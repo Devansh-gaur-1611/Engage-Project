@@ -4,10 +4,9 @@ import CustomErrorHandler from '../../Services/CustomerrorHandler';
 import bcrypt from 'bcrypt';
 import discord from '../../Services/discord';
 import firebaseServices from '../../Services/firebaseConfig';
+import moment from "moment";
 
-function daysInMonth(month, year) {
-    return new Date(year, month, 0).getDate();
-}
+const today = moment().utcOffset(330);
 
 const registerController = {
 
@@ -74,11 +73,7 @@ const registerController = {
         const adminId = _id;
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const d = new Date();
-        const month = d.getMonth() + 1;
-        const year = d.getFullYear();
-
-        const days = daysInMonth(month, year)
+        const days = today.daysInMonth();
         const blank_days_list = Array(days).fill('A')
 
         const attendance = {

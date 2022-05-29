@@ -3,12 +3,15 @@ import styles from "./AddParticipants.module.css";
 import Navbar from "../navbar/Navbar";
 import axios from "axios";
 import Loader from "../Loader/Loader";
+import PasswordModal from "./PasswordModal";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { handleFileInputChange, getBase64 } from "./helper";
 import { storage } from "../../firebase";
 import { getDownloadURL, uploadBytesResumable, ref } from "firebase/storage";
+import { useDispatch } from "react-redux";
+import { setDefaultPassword } from "../../features/User/UserPasswordSlice";
 
 const AddParticipants = () => {
   // Declaring variables
@@ -24,6 +27,8 @@ const AddParticipants = () => {
   const [email, setEmail] = useState("");
   const [workProfile, setWorkProfile] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
 
   // Converting image to base64url and handling the errors
   useEffect(() => {
@@ -123,7 +128,7 @@ const AddParticipants = () => {
   const submit = (firebaseURL) => {
     setLoading(true);
     try {
-      const getdata = () => {
+      const getdata = (requestCount) => {
         const atoken = window.localStorage.getItem("accessToken");
         const rtoken = window.localStorage.getItem("refreshToken");
 
@@ -152,15 +157,17 @@ const AddParticipants = () => {
             )
           )
             .then((res) => {
+              dispatch(setDefaultPassword(res.data.default_password));
               enqueueSnackbar("User registered successfully", {
                 variant: "success",
               });
+              setIsOpen(true);
               setLoading(false);
               return;
             })
             .catch((error) => {
               // Handling case when access token is expired
-              if (error.response && error.response.status === 401) {
+              if (error.response && error.response.status === 401 && requestCount == 0) {
                 axios
                   .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
@@ -169,7 +176,7 @@ const AddParticipants = () => {
                     // Updating access and refresh token
                     localStorage.setItem("accessToken", res.data.access_token);
                     localStorage.setItem("refreshToken", res.data.refresh_token);
-                    getdata();
+                    getdata(1);
                     return;
                   })
                   .catch((error) => {
@@ -181,6 +188,19 @@ const AddParticipants = () => {
                     navigate("/");
                     return;
                   });
+              } else if (error.response && error.response.status == 409) {
+                enqueueSnackbar("This email is already been taken", {
+                  variant: "error",
+                });
+                setLoading(false);
+              } else if (error.response && error.response.status === 401 && requestCount > 0) {
+                // Handling erros when user is not admin
+                enqueueSnackbar("You are not an admin", {
+                  variant: "error",
+                });
+                window.localStorage.clear();
+                navigate("/");
+                setLoading(false);
               } else {
                 enqueueSnackbar("Some error occurred while submitting. Please try again", {
                   variant: "error",
@@ -199,7 +219,7 @@ const AddParticipants = () => {
         }
       };
 
-      getdata();
+      getdata(0);
       return;
     } catch (error) {
       enqueueSnackbar("Some error occured", {
@@ -250,6 +270,7 @@ const AddParticipants = () => {
           </form>
         </div>
       </div>
+      {isOpen && <PasswordModal setIsOpen={setIsOpen} email={email} />}
     </>
   );
 };

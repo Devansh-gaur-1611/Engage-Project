@@ -23,7 +23,7 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       // Function which handle the request and handle the request in case access token is expired
-      const getdata = () => {
+      const getdata = (requestCount) => {
         const atoken = window.localStorage.getItem("accessToken");
         const rtoken = window.localStorage.getItem("refreshToken");
         if (atoken) {
@@ -42,7 +42,7 @@ const ProfilePage = () => {
             })
             .catch((error) => {
               // In case if access token has expired
-              if (error.response && error.response.status === 401) {
+              if (error.response && error.response.status === 401 && requestCount == 0) {
                 axios
                   .post(process.env.REACT_APP_NODE_API_URL + "api/user/refresh", {
                     refresh_token: rtoken,
@@ -50,7 +50,7 @@ const ProfilePage = () => {
                   .then((res) => {
                     localStorage.setItem("accessToken", res.data.access_token);
                     localStorage.setItem("refreshToken", res.data.refresh_token);
-                    getdata();
+                    getdata(1);
                     return;
                   })
                   .catch((error) => {
@@ -62,9 +62,17 @@ const ProfilePage = () => {
                     navigate("/");
                     return;
                   });
+              } else if (error.response && error.response.status === 401 && requestCount > 0) {
+                // Handling erros except when access token is expired
+                enqueueSnackbar("You are not an admin", {
+                  variant: "error",
+                });
+                window.localStorage.clear();
+                navigate("/");
+                setLoading(false);
               } else {
                 // Handling erros except when access token is expired
-                enqueueSnackbar("Some error occurred. Please try again", {
+                enqueueSnackbar("Some error occurred. Please refresh the page", {
                   variant: "error",
                 });
                 setLoading(false);
@@ -83,7 +91,7 @@ const ProfilePage = () => {
       };
 
       // Calling the above function
-      getdata();
+      getdata(0);
       return;
     } catch (error) {
       setLoading(false);

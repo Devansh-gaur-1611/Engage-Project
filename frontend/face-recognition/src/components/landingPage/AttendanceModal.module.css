@@ -21,7 +21,7 @@
 
 .modal {
   width: 400px;
-  height: 280px;
+  height: 232px;
   background: #140536;
   color: white;
   z-index: 10;
@@ -31,7 +31,7 @@
 }
 
 .modalHeader {
-  height: 75px;
+  height: 67px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -74,11 +74,14 @@
   border: 1px solid #fff;
   width: calc(100% - 10px);
   height: 28px;
-  margin: 30px 0px 20px;
+  margin: 14px 0px 20px;
   border-radius: 4px;
+  padding-left: 5px;
+  outline: none;
 }
+
 .modalActions {
-  padding: 10px;
+  padding: 0px 7px 10px;
   text-align: left;
 }
 

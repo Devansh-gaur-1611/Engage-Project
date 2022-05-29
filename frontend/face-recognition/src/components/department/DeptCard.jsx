@@ -1,17 +1,13 @@
 import React from "react";
 import styles from "./Department.module.css";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentDeptName, setColor, setAbv } from "../../features/Department/DepartmentSlice";
 
 const DeptCard = ({ name, color, abv }) => {
-  const dispatch = useDispatch();
-
+ 
   const handleClick = () => {
-    console.log("object");
-    dispatch(setCurrentDeptName(name));
-    dispatch(setColor(color));
-    dispatch(setAbv(abv));
+    localStorage.setItem("deptName", name);
+    localStorage.setItem("deptColor",color)
+    localStorage.setItem("deptAbv",abv)
   };
   return (
     <Link to={`/department/${name}`} className={styles.link} onClick={() => handleClick()}>

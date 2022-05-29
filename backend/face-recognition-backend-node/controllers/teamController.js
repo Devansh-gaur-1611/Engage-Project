@@ -2,6 +2,9 @@ import Joi from 'joi';
 import { Team, User, Holidays, AttendanceTime } from "../models";
 import CustomErrorHandler from '../Services/CustomerrorHandler';
 import discord from '../Services/discord';
+import moment from "moment";
+
+const today = moment().utcOffset(330);
 
 const teamController = {
     async createTeam(req, res, next) {
@@ -118,15 +121,9 @@ const teamController = {
             allUsers.forEach(async (singleUser) => {
                 let attendance = singleUser.attendance.currentMonth;
 
-                // attendance.forEach((element, index) => {
-                //     if (element === 'H') {
-                //         attendance[index] = 'A';
-                //     };
-                // });
                 // setting all the date as holidays
                 dates.forEach(element => {
-                    const current = new Date();
-                    let currentDate = current.getDate();
+                    let currentDate = today.date();
 
                     if (element >= currentDate) {
                         attendance[element - 1] = 'H';
@@ -135,14 +132,13 @@ const teamController = {
                 // setting all the days as holidays
                 days.forEach(day => {
                     attendance.map((element, index) => {
-                        const current = new Date();
-                        let month = current.getMonth() + 1;
-                        let year = current.getFullYear();
+                        let month = today.month() + 1;
+                        let year = today.year();
 
                         const d = new Date(`${year}-${month}-${index + 1}`)
 
                         const tempDate = d.getDay()
-                        if (tempDate === day && (index + 1 >= current.getDate())) {
+                        if (tempDate === day && (index + 1 >= today.date())) {
                             attendance[index] = 'H';
                         }
                     });
@@ -192,16 +188,15 @@ const teamController = {
             const allUsers = await User.find();
             allUsers.forEach(async (singleUser) => {
                 let attendance = singleUser.attendance.currentMonth;
-                const current = new Date();
 
                 attendance.forEach((element, index) => {
-                    if (element === 'H' && (index + 1 >= current.getDate())) {
+                    if (element === 'H' && (index + 1 >= today.date())) {
                         attendance[index] = 'A';
                     };
                 });
                 // setting all the date as holidays
                 dates.forEach(element => {
-                    let currentDate = current.getDate();
+                    let currentDate = today.date();
 
                     if (element >= currentDate) {
                         attendance[element - 1] = 'H';
@@ -210,13 +205,13 @@ const teamController = {
                 // setting all the days as holidays
                 days.forEach(day => {
                     attendance.map((element, index) => {
-                        let month = current.getMonth() + 1;
-                        let year = current.getFullYear();
+                        let month = today.month() + 1;
+                        let year = today.year();
 
                         const d = new Date(`${year}-${month}-${index + 1}`)
 
                         const tempDate = d.getDay()
-                        if (tempDate === day && (index + 1 >= current.getDate())) {
+                        if (tempDate === day && (index + 1 >= today.date())) {
                             attendance[index] = 'H';
                         }
                     });

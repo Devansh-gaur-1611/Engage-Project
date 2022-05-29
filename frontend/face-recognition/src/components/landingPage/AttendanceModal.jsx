@@ -26,7 +26,7 @@ const AttendanceModal = ({ setTeamModalOpen, imageSrc }) => {
 
     // Call for backend API
     Promise.resolve(
-      axios.post(process.env.REACT_APP_FLASK_API_URL+"markAttendence", {
+      axios.post(process.env.REACT_APP_FLASK_API_URL + "markAttendence", {
         imageSrc: imageSrc,
         teamName: teamName,
       })
@@ -39,9 +39,15 @@ const AttendanceModal = ({ setTeamModalOpen, imageSrc }) => {
         setTeamModalOpen(false);
       })
       .catch((error) => {
-        enqueueSnackbar(error.response.data.error, {
-          variant: "error",
-        });
+        if (error.response && error.response.status !== 500) {
+          enqueueSnackbar(error.response.data.error, {
+            variant: "error",
+          });
+        }else{
+          enqueueSnackbar("Your attendence can't be marked now", {
+            variant: "error",
+          });
+        }
         setLoading(false);
         setTeamModalOpen(false);
       });

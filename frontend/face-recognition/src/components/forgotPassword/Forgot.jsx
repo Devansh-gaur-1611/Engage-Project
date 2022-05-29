@@ -5,6 +5,7 @@ import forgotImage from "../../assets/forgotImage.svg";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Loader from "../Loader/Loader";
+import { FaUsers } from "react-icons/fa";
 
 const ForgotPassword = () => {
   //Declaring variables
@@ -53,7 +54,12 @@ const ForgotPassword = () => {
 
   // Handling check for same password & confirm password
   const handleValidation = () => {
-    if (typeof password === "undefined" || password === "" || password.toString().length > 50 || 8 > password.toString().length) {
+    if (
+      typeof password === "undefined" ||
+      password === "" ||
+      password.toString().length > 50 ||
+      8 > password.toString().length
+    ) {
       enqueueSnackbar("Password should be minimum of 8 characters !!", {
         variant: "error",
       });
@@ -175,16 +181,17 @@ const ForgotPassword = () => {
         {loading && <Loader />}
         <div className={styles.innerContainer}>
           <div className={styles.imageContainerSignIn}>
-            <span className={styles.iconContainer}>{/* <img src="/images/logoNew.svg" className={styles.icon} /> */}</span>
+            <div className={styles.iconContainer} onClick={() => navigate("/")}>
+              <FaUsers className={styles.icon} />
+              <p className={styles.iconName}>Attendo</p>
+            </div>
             <img src={forgotImage} alt="signin" className={styles.image} />
           </div>
           <div className={styles.formContainer}>
             <div className={styles.container}>
-              <div className={styles.logoSmallScreenContainer}>
-                {/* <img
-                src="/images/logoNew.svg"
-                className={styles.iconSmallScreen}
-              /> */}
+              <div className={styles.iconContainerSmallScreen} onClick={() => navigate("/")}>
+                <FaUsers className={styles.icon} />
+                <p className={styles.iconName}>Attendo</p>
               </div>
               <div className={styles.formTitleContainer}>
                 <h1 className={styles.formTitle}>Forgot Password</h1>

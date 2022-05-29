@@ -4,13 +4,13 @@ import Home from "./pages/home";
 import AdminPanelLogin from "./pages/adminlogin";
 import UserLogin from "./pages/userlogin";
 import Department from "./components/department/Department";
-import EmployeesPage from "./components/employees/Employees"
+import EmployeesPage from "./components/employees/Employees";
 import AddParticipants from "./components/addParticipants/AddParticipants";
 import UserProfileAdmin from "./pages/userprofileadmin";
 import UserProfileLocal from "./pages/userprofilelocal";
-import ForgotPassword from "./components/forgotPassword/Forgot"
-import Criminals from "./components/criminals/Criminals";
+import ForgotPassword from "./components/forgotPassword/Forgot";
 import SetTimeHolidayPage from "./pages/SetTimeHolidayPage";
+import CreateAdmin from "./components/createAdmin/CreateAdmin";
 
 function App() {
   return (
@@ -26,10 +26,8 @@ function App() {
           <Route exact path={`/userprofile/:userId`} element={<UserProfileLocal />} />
           <Route exact path={`/admin/userprofile/:userId`} element={<UserProfileAdmin />} />
           <Route exact path={`/:className/addParticipants`} element={<AddParticipants />} />
-          <Route exact path={`/detectcriminals`} element={<Criminals />} />
           <Route exact path={`/settimeholidays`} element={<SetTimeHolidayPage />} />
-          
-
+          <Route exact path={`/createAdmin`} element={<CreateAdmin />} />
         </Routes>
       </div>
     </Router>
