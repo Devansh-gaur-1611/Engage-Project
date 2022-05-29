@@ -24,6 +24,7 @@ const Card = ({ image, name, rank, presentDays, absentDays, userId }) => {
         </div>
         <div className={styles.bottomSection}>
           <h1 className={styles.heading}>Attendence</h1>
+          <p className={styles.prevText}>{`(Till Prev. Month)`}</p>
           <div className={styles.bottomInnerSection}>
             <div className={styles.leftSection}>
               <span className={styles.presentDays}>{present}</span>
