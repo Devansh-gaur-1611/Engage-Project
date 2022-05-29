@@ -17,9 +17,11 @@ router.post('/update/holidays', [auth, admin], teamController.updateHolidays);
 router.get('/users/team/:teamName', [auth, admin], userController.getUsersTeam);
 
 router.post('/user/update/attendance', userController.updateAttendance);
+router.post('/user/update/profile', userController.updateUser);
 router.post('/user/login', loginController.login);
 router.post('/user/forgot/password', forgotPasswordController.forgot);
 router.post('/user/register', [auth, admin], registerController.register);
+router.post('/admin/register', [auth, admin], registerController.registerAdmin);
 router.post('/user/refresh', refreshController.refresh);
 router.post('/user/logout', loginController.logout);
 // router.put('/update/:id', [auth], userController.update);

@@ -6,11 +6,11 @@ import discord from '../../Services/discord';
 import firebaseServices from '../../Services/firebaseConfig';
 import moment from "moment";
 
-const today = moment().utcOffset(330);
 
 const registerController = {
 
     async register(req, res, next) {
+        const today = moment().utcOffset(330);
 
         // validation
         const registerSchema = Joi.object({
@@ -117,7 +117,45 @@ const registerController = {
             return next(err);
         }
         res.status(201).json({ default_password: password, status: "Success", msg: "User Registered Successfully !!!  " });
-    }
+    },
+    async registerAdmin(req, res, next) {
+        // validation
+        const registerSchema = Joi.object({
+            email: Joi.string().email().required()
+        });
+
+        const { error } = registerSchema.validate(req.body);
+
+        if (error) {
+            // ok = firebaseServices.DeleteFileInFirebase(req.body.profileImgLink)
+            return next(error);
+        }
+        const { email } = req.body;
+
+        let document;
+
+        try {
+            const exist = await User.exists({ email: req.body.email });
+            if (!exist) {
+                // implimetation for discord error logs
+                discord.SendErrorMessageToDiscord(req.body.email, "Register Admin", "error user not exist in our database !!");
+                return next(CustomErrorHandler.badRequest("User Not exist !!"));
+            }
+            document = await User.findOneAndUpdate({ email }, {
+                role: "admin"
+            });
+
+            if (!document) {
+                discord.SendErrorMessageToDiscord(email, "Register Admin", "error in creating the user in database !!");
+                return next(CustomErrorHandler.serverError());
+            }
+
+        } catch (err) {
+            discord.SendErrorMessageToDiscord(req.body.email, "Register Admin", err);
+            return next(CustomErrorHandler.serverError());
+        }
+        res.status(200).json({ status: "Success", msg: "Admin Registered Successfully. " });
+    },
 };
 
 export default registerController;

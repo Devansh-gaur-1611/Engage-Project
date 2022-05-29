@@ -2,10 +2,11 @@ import cron from "node-cron";
 import { User } from "../models";
 import moment from "moment";
 
-const today = moment().utcOffset(330);
 // Asia/Kolkata
 const cronJobs = {
     NewMonthDefaults() {
+        const today = moment().utcOffset(330);
+
         cron.schedule(`05 00 * * *`, async () => {
             const allUsers = await User.find();
             allUsers.forEach(async (singleUser) => {

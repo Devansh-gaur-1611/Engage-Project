@@ -4,8 +4,6 @@ import CustomErrorHandler from '../Services/CustomerrorHandler';
 import discord from '../Services/discord';
 import moment from "moment";
 
-const today = moment().utcOffset(330);
-
 const teamController = {
     async createTeam(req, res, next) {
         const createTeamSchema = Joi.object({
@@ -90,6 +88,7 @@ const teamController = {
         res.status(200).json({ status: "success", encodings: encode });
     },
     async setHolidays(req, res, next) {
+        const today = moment().utcOffset(330);
 
         const holidaySchema = Joi.object({
             adminId: Joi.string().required(),
@@ -160,6 +159,7 @@ const teamController = {
         res.status(200).json({ status: "success", msg: "holidays set successfully !!" });
     },
     async updateHolidays(req, res, next) {
+        const today = moment().utcOffset(330);
 
         const holidaySchema = Joi.object({
             adminId: Joi.string().required(),
