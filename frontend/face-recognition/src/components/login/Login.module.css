@@ -28,13 +28,7 @@
   width: 100%;
   overflow-y: hidden;
 }
-.icon {
-  width: 90px;
-  margin-left: 50px;
-  margin-top: 18px;
-  cursor: pointer;
-  z-index: 30;
-}
+
 
 .imageContainerSignIn {
   width: 53vw;
@@ -45,11 +39,32 @@
   height: 100%;
 }
 
-
-.iconContainer {
+.iconContainer,.iconContainerSmallScreen {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 30px;
+  cursor: pointer;
+}
+.iconContainerSmallScreen{
+  display:none
+}
+
+.icon{
+    width: 40px;
+    height: 40px;
+    color: #009cda;
+}
+
+.iconName {
+  font-size: 32px;
+  background: -webkit-linear-gradient(#eee, #009cda);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0px;
+  margin-left: 15px;
+  font-weight: 600;
 }
 
 .formContainer {
@@ -226,6 +241,29 @@
   .container{
     width: 80%;
   }
+  .iconContainer{
+    display:none
+  }
+  .iconContainerSmallScreen{
+    display: flex;
+    left: 30px;
+    margin-left:0px
+  }
+  
+}
+@media screen and (max-height:600px){
+  .innerContainer{
+    height: fit-content;
+    min-height: 600px
+  }
+  .mainContainer {
+    height: fit-content;
+    min-height: 600px;
+  }
+  .imageContainerSignIn{
+    min-height:600px
+  }
+
 }
 @media screen and (max-width:400px){
   .container{

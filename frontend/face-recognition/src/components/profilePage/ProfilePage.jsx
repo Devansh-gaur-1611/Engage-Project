@@ -7,6 +7,7 @@ import Navbar from "../navbar/Navbar";
 import Profile from "../userProfile/Profile";
 import styles from "./ProfilePage.module.css";
 import Loader from "../Loader/Loader";
+import { FaUsers } from "react-icons/fa";
 
 const ProfilePage = ({ pageType }) => {
   // Declaring variables
@@ -46,7 +47,7 @@ const ProfilePage = ({ pageType }) => {
               setEmail(res.data.users.email);
               setImgURL(res.data.users.profileImgLink);
               setMobileNumber(res.data.users.contactNumber);
-              setWorkProfile("CTO");
+              setWorkProfile(res.data.users.workProfile);
               setJoiningDate(res.data.users.joiningDate);
               setCurrentMonthAttendence(res.data.users.attendance.currentMonth);
               setLoading(false);
@@ -157,25 +158,62 @@ const ProfilePage = ({ pageType }) => {
   return (
     <>
       {loading && <Loader />}
-      <Navbar pageType={pageType} />
-      <div className={styles.mainContainer}>
-        <div className={styles.logoutContainer}>
-          <div className={styles.logout} onClick={logoutHandler}>
-            Logout
+      {pageType == "Admin" && (
+        <>
+          <Navbar pageType={pageType} />
+          <div className={styles.mainContainer}>
+            <div className={styles.subContainer}>
+              <Profile
+                name={name}
+                imgURL={imgURL}
+                workProfile={workProfile}
+                teamName={teamName}
+                mobileNumber={mobileNumber}
+                email={email}
+              />
+              <Calender currentMonthAttendence={currentMonthAttendence} joiningDate={joiningDate} />
+            </div>
           </div>
-        </div>
-        <div className={styles.subContainer}>
-          <Profile
-            name={name}
-            imgURL={imgURL}
-            workProfile={workProfile}
-            teamName={teamName}
-            mobileNumber={mobileNumber}
-            email={email}
-          />
-          <Calender currentMonthAttendence={currentMonthAttendence} joiningDate={joiningDate} />
-        </div>
-      </div>
+        </>
+      )}
+      {pageType == "Normal" && (
+        <>
+          <div className={styles.mainContainerNormal}>
+            <div className={styles.topContainer}>
+              <div className={styles.iconContainer} onClick={() => navigate("/")}>
+                <FaUsers className={styles.icon} />
+                <p className={styles.iconName}>Attendo</p>
+              </div>
+              <div className={styles.btnAdminContainer}>
+                <button
+                  className={styles.btnAdmin}
+                  onClick={() => {
+                    logoutHandler();
+                    navigate("/");
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+            <div className={styles.subContainerNormal}>
+              <div className={styles.profileComponent}>
+                <Profile
+                  name={name}
+                  imgURL={imgURL}
+                  workProfile={workProfile}
+                  teamName={teamName}
+                  mobileNumber={mobileNumber}
+                  email={email}
+                />
+              </div>
+              <div className={styles.calendarComponent}>
+                <Calender currentMonthAttendence={currentMonthAttendence} joiningDate={joiningDate} />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };
