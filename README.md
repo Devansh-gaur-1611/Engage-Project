@@ -41,7 +41,7 @@ Recognizing Faces in real time **( not implemented as of now, But sure of doing 
 
 
 ## Video Demonstration 
-🚀 Here's the link to the video demonstration of Meet-Up 🚀
+🚀 Here's the link to the video demonstration of Attendo 🚀
 - https://drive.google.com/drive/folders/1PD40aYAp-6myfnFkAWcEOnfpn-ZPPfs6?usp=sharing
 
 
