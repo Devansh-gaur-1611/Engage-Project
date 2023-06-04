@@ -26,6 +26,7 @@ yarn-error.log*
 # virtualenv
 venv/
 ENV/
+.venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
