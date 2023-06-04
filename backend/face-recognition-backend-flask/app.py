@@ -9,6 +9,9 @@ import io
 from face_rec import FaceRec
 import face_recognition
 import numpy as np
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 app = Flask(__name__)
@@ -21,7 +24,7 @@ def markAttendence():
 
     if data :
         try:
-            r = requests.get("https://apis.techdevelopers.live/api/encodings/"+data['teamName'])
+            r = requests.get(os.getenv('NODE_BACKEND_URL')+"api/encodings/"+data['teamName'])
             if(r.status_code==200):
                 jsonObject=r.json()
 
@@ -58,7 +61,7 @@ def markAttendence():
                 elif len(unknownIds)>1:
                     return make_response(jsonify({"error":"More than one faces found. Please try again individually!!"}),400)
                 else:
-                    reqPost = requests.post("https://apis.techdevelopers.live/api/user/update/attendance", json={"id": unknownIds[0],"status":"P"})
+                    reqPost = requests.post(os.getenv('NODE_BACKEND_URL')+"api/user/update/attendance", json={"id": unknownIds[0],"status":"P"})
                     if reqPost.status_code == 200:
                         return make_response(jsonify({"message":"Congratulations!! Your attendance has been marked"}),200)
                     else:
